@@ -28,9 +28,10 @@
                 <nav class="sidebar-nav">
                     <div class="nav-section">
                         <h2 class="section-title">Your Library</h2>
-                        <button class="create-btn">
+                        <button class="create-btn" id="btn-create">
                             <i class="fas fa-plus"></i>
                             Create
+                            <p class="tooltip-create tooltip-base" id="tooltip-create">Tạo anh sách phát</p>
                         </button>
                     </div>
 
@@ -40,8 +41,9 @@
                     </div>
 
                     <div class="search-library">
-                        <button class="search-library-btn">
+                        <button class="search-library-btn" id="btn-search_library">
                             <i class="fas fa-search"></i>
+                            <p class="tooltip-search_library tooltip-base" id="tooltip-search_library">Tìm kiếm trong thư viên</p>
                         </button>
                         <button class="sort-btn">
                             Recents
@@ -50,66 +52,6 @@
                     </div>
 
                     <div class="library-content">
-                        <div class="library-item active">
-                            <div class="item-icon liked-songs">
-                                <i class="fas fa-heart"></i>
-                            </div>
-                            <div class="item-info">
-                                <div class="item-title">Liked Songs</div>
-                                <div class="item-subtitle">
-                                    <i class="fas fa-thumbtack"></i>
-                                    Playlist • 3 songs
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="library-item">
-                            <img
-                                src="placeholder.svg?height=48&width=48"
-                                alt="Đen"
-                                class="item-image"
-                            />
-                            <div class="item-info">
-                                <div class="item-title">Đen</div>
-                                <div class="item-subtitle">Artist</div>
-                            </div>
-                        </div>
-
-                        <div class="library-item">
-                            <img
-                                src="placeholder.svg?height=48&width=48"
-                                alt="Trúc Nhân"
-                                class="item-image"
-                            />
-                            <div class="item-info">
-                                <div class="item-title">Trúc Nhân</div>
-                                <div class="item-subtitle">Artist</div>
-                            </div>
-                        </div>
-
-                        <div class="library-item">
-                            <img
-                                src="placeholder.svg?height=48&width=48"
-                                alt="24.03"
-                                class="item-image"
-                            />
-                            <div class="item-info">
-                                <div class="item-title">24.03</div>
-                                <div class="item-subtitle">Playlist • Han</div>
-                            </div>
-                        </div>
-
-                        <div class="library-item">
-                            <img
-                                src="placeholder.svg?height=48&width=48"
-                                alt="Thùy Chi"
-                                class="item-image"
-                            />
-                            <div class="item-info">
-                                <div class="item-title">Thùy Chi</div>
-                                <div class="item-subtitle">Artist</div>
-                            </div>
-                        </div>
                     </div>
                 </nav>
             </aside>
@@ -119,8 +61,9 @@
                 <header class="main-header">
                     <div class="search-container">
                         <div class="search-box">
-                            <button class="home-btn">
+                            <button class="home-btn" id="btn-home">
                                 <i class="fas fa-home"></i>
+                                <p class="tooltip-home tooltip-base" id="tooltip-home">Trang Chủ</p>
                             </button>
                             <div class="search-input-wrapper">
                                 <i class="fas fa-search search-icon"></i>
@@ -472,27 +415,33 @@
                         </div>
                         <div class="player-artist">Noo Phước Thịnh</div>
                     </div>
-                    <button class="add-btn">
+                    <button class="add-btn" id="btn-like_song">
                         <i class="fa-solid fa-plus"></i>
+                        <p class="tooltip-like_song tooltip-base" id="tooltip-like_song">Thêm vào bài hát đã thích</p>
                     </button>
                 </div>
 
                 <div class="player-center">
                     <div class="player-controls">
-                        <button class="control-btn active">
+                        <button class="control-btn active " id="btn-ramdom">
                             <i class="fas fa-random"></i>
+                            <p class="tooltip-random tooltip-base" id="tooltip-random">Bật tính năng trộn bài</p>
                         </button>
-                        <button class="control-btn">
+                        <button class="control-btn" id="btn-prev">
                             <i class="fas fa-step-backward"></i>
+                            <p class="tooltip-prev tooltip-base" id="tooltip-prev">Trước</p>
                         </button>
-                        <button class="control-btn play-btn">
+                        <button class="control-btn play-btn" id="btn-pause">
                             <i class="fas fa-pause"></i>
+                            <p class="tooltip-pause tooltip-base" id="tooltip-pause">Tạm dừng</p>
                         </button>
-                        <button class="control-btn">
+                        <button class="control-btn" id="btn-next">
                             <i class="fas fa-step-forward"></i>
+                            <p class="tooltip-next tooltip-base" id="tooltip-next">Tiếp</p>
                         </button>
-                        <button class="control-btn">
+                        <button class="control-btn" id="btn-loop">
                             <i class="fas fa-redo"></i>
+                            <p class="tooltip-loop tooltip-base" id="tooltip-loop">Kích hoạt chế độ lặp lại</p>
                         </button>
                     </div>
                     <div class="progress-container">
@@ -505,21 +454,24 @@
                     </div>
                 </div>
 
-                <div class="player-right">
-                    <button class="control-btn">
+                <div class="player-right" >
+                    <button class="control-btn" id="btn-song">
                         <i class="fas fa-microphone"></i>
+                        <p class="tooltip-song tooltip-base" id="tooltip-song">Lời bài hát</p>
                     </button>
                     <div class="volume-container">
-                        <button class="control-btn">
+                        <button class="control-btn" id="btn-sound">
                             <i class="fas fa-volume-down"></i>
+                            <p class="tooltip-sound tooltip-base" id="tooltip-sound">Tắt tiếng</p>
                         </button>
                         <div class="volume-bar">
                             <div class="volume-fill" style="width: 70%"></div>
                             <div class="volume-handle"></div>
                         </div>
                     </div>
-                    <button class="control-btn">
+                    <button class="control-btn" id="btn-full_screen">
                         <i class="fas fa-expand"></i>
+                        <p class="tooltip-full_screen tooltip-base" id="tooltip-full_screen">Mở chế độ toàn màn hình</p>
                     </button>
                 </div>
             </footer>
@@ -639,6 +591,6 @@
             </div>
         </div>
 
-        <script src="main.js"></script>
+        <script src="main.js" type="module"></script>
     </body>
 </html>

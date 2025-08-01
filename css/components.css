@@ -1,5 +1,16 @@
 /* Component Styles */
-
+.tooltip-base{
+    position: absolute;
+    padding: 6px 12px;
+    border-radius: 5px;
+    pointer-events: none;
+    color: #fff;
+    white-space: nowrap;
+    background: #333;
+    font-weight: 500;
+    opacity: 0;
+    transition: opacity .5s ease;
+}
 /* Buttons */
 .btn {
     padding: var(--spacing-sm) var(--spacing-md);
@@ -54,6 +65,7 @@
 
 /* Home button */
 .home-btn {
+    position: relative;
     width: 48px;
     height: 48px;
     border-radius: var(--radius-full);
@@ -64,7 +76,14 @@
     justify-content: center;
     transition: all var(--transition-fast);
 }
-
+.tooltip-home.tooltip-base{
+  top: 50px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+.tooltip-home.active{
+    opacity: 1;
+}
 .home-btn:hover {
     background-color: var(--bg-hover);
     transform: scale(1.04);
@@ -133,6 +152,7 @@
 
 /* Create button */
 .create-btn {
+    position: relative;
     padding: var(--spacing-xs) var(--spacing-sm);
     border-radius: var(--radius-full);
     background-color: transparent;
@@ -143,6 +163,15 @@
     display: flex;
     align-items: center;
     gap: var(--spacing-sm);
+}
+.tooltip-create.tooltip-base{
+    top: -33px;
+    left: 29%;
+    transform: translateX(-50%);
+    z-index: var(--z-tooltip);
+}
+.tooltip-base.active{
+   opacity: 1;
 }
 
 .create-btn:hover {
@@ -183,6 +212,7 @@
 }
 
 .search-library-btn {
+    position: relative;
     width: 32px;
     height: 32px;
     border-radius: var(--radius-full);
@@ -193,7 +223,14 @@
     justify-content: center;
     transition: all var(--transition-fast);
 }
+.tooltip-search_library.tooltip-base{
+    top: -29px;
+    left: -14px;
+}
 
+.tooltip-search_library.active{
+    opacity: 1;
+}
 .search-library-btn:hover {
     background-color: var(--bg-tertiary);
     color: var(--text-primary);
@@ -586,7 +623,37 @@
     background: currentColor;
     transform: translateX(-50%);
 }
-
+.tooltip-random.tooltip-base,
+.tooltip-prev.tooltip-base,
+.tooltip-pause.tooltip-base,
+.tooltip-next.tooltip-base,
+.tooltip-loop.tooltip-base,
+.tooltip-song.tooltip-base,
+.tooltip-sound.tooltip-base{
+    bottom: 126%;
+    left: 50%;
+    transform: translateX(-50%);
+}
+.tooltip-full_screen.tooltip-base{
+    bottom: 126%;
+    right: -20px;
+}
+.tooltip-like_song.tooltip-base{
+    bottom: 126%;
+    left: 50%;
+    transform: translateX(-50%);
+}
+.tooltip-random.active,
+.tooltip-prev.active,
+.tooltip-pause.active,
+.tooltip-next.active,
+.tooltip-loop.active,
+.tooltip-song.active,
+.tooltip-sound.active,
+.tooltip-full_screen.active,
+.tooltip-like_song.active{
+    opacity: 1;
+}
 .play-btn {
     width: 32px;
     height: 32px;
