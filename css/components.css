@@ -290,9 +290,13 @@
    background: #3e3e3e;
    border-radius: 4px;
 }
+.sort-item i{
+    display: none;
+}
 .sort-item.active p,
 .sort-item.active i
 {
+   display: block;
    color: var(--accent-active);
 }
 

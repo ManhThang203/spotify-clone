@@ -4,19 +4,24 @@ class HttpRequest {
   }
   async _send(path, method, data, options = {}) {
     try {
-      const _option =  {
+      const _option = {
         ...options,
         method,
         headers: {
           ...options.headers,
           "Content-Type": "application/json",
         },
-      }
-      if(data){
+      };
+      if (data) {
         _option.body = JSON.stringify(data);
       }
-      const res = await fetch(`${this.baseUrl}${path}`,_option);
-      if (!res.ok) throw new Error("HTTP error", res.status);
+      const res = await fetch(`${this.baseUrl}${path}`, _option);
+      if (!res.ok) {
+        if (res.status === 429) {
+          alert("Bạn đã gửi quá nhiều yêu cầu. Vui lòng thử lại.");
+        }
+        throw new Error("HTTP error", res.status);
+      }
       const response = await res.json();
       return response;
     } catch (error) {
