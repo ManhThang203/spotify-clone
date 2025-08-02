@@ -45,13 +45,54 @@
                             <i class="fas fa-search"></i>
                             <p class="tooltip-search_library tooltip-base" id="tooltip-search_library">Tìm kiếm trong thư viên</p>
                         </button>
-                        <button class="sort-btn">
-                            Recents
-                            <i class="fas fa-list"></i>
-                        </button>
+                        <div class="sort">
+                            <button class="sort-btn" id="sort-btn">
+                                Recents
+                                <i class="fas fa-list"></i>
+                            </button>
+                            <div class="sort-modal" id="sort-modal">
+                                <div class="container">
+                                    <h3 class="title-header">Sắp Xếp theo</h3>
+                                    <div class="sort-item" id="sort-item_near" >
+                                        <p>Gân đây</p>
+                                        <i class="fa-solid fa-check"></i>
+                                    </div>
+                                    <div class="sort-item" id="sort-item" >
+                                        <p>Mới thêm gần đây</p>
+                                        <i class="fa-solid fa-check"></i>
+                                    </div>
+                                    <div class="sort-item" id="sort-item">
+                                        <p>Thứ tự chữ cái</p>
+                                        <i class="fa-solid fa-check"></i>
+                                    </div>
+                                    <div class="sort-item" id="sort-item" >
+                                        <p>Người sáng tạo</p>
+                                        <i class="fa-solid fa-check"></i>
+                                    </div>
+                                    <h3 class="title-footer">Xem dưới dạng</h3>
+                                    <div class="format">
+                                        <div class="format-wrapper">
+                                            <button class="btn-format" id="btn-menu_icon">
+                                                <i class="fa-solid fa-bars"></i>
+                                            </button>
+                                            <button class="btn-format" id="btn-format">
+                                                <i class="fa-solid fa-list"></i>
+                                            </button>
+                                             <button class="btn-format" id="btn-format">
+                                                <i class="fa-solid fa-th"></i>
+                                            </button>
+                                             <button class="btn-format" id="btn-format">
+                                                <i class="fa-solid fa-grip"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
 
-                    <div class="library-content">
+                    <div class="library-content" id="library-content">
                     </div>
                 </nav>
             </aside>
@@ -306,9 +347,10 @@
                     <section class="artist-hero">
                         <div class="hero-background">
                             <img
-                                src="placeholder.svg"
+                                src=""
                                 alt="Đen artist background"
                                 class="hero-image"
+                                id="hero-image"
                             />
                             <div class="hero-overlay"></div>
                         </div>
@@ -317,9 +359,9 @@
                                 <i class="fas fa-check-circle"></i>
                                 <span>Verified Artist</span>
                             </div>
-                            <h1 class="artist-name">Đen</h1>
-                            <p class="monthly-listeners">
-                                1,021,833 monthly listeners
+                            <h1 class="artist-name" id="artist-name"></h1>
+                            <p class="monthly-listeners" id="monthly-listeners">
+                                
                             </p>
                         </div>
                     </section>
@@ -334,8 +376,8 @@
                     <!-- Popular Tracks -->
                     <section class="popular-section">
                         <h2 class="section-title">Popular</h2>
-                        <div class="track-list">
-                            <div class="track-item">
+                        <div class="track-list" id="track-list">
+                            <!-- <div class="track-item">
                                 <div class="track-number">1</div>
                                 <div class="track-image">
                                     <img
@@ -395,7 +437,7 @@
                                 <button class="track-menu-btn">
                                     <i class="fas fa-ellipsis-h"></i>
                                 </button>
-                            </div>
+                            </div> -->
                         </div>
                     </section>
                 </div>
@@ -474,6 +516,9 @@
                         <p class="tooltip-full_screen tooltip-base" id="tooltip-full_screen">Mở chế độ toàn màn hình</p>
                     </button>
                 </div>
+
+              <!-- audio music -->
+              <audio id="audioMusic" src=""></audio>
             </footer>
         </div>
 
