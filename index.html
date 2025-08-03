@@ -455,7 +455,22 @@
                             Sign up to start listening
                         </h1>
 
-                        <form class="auth-form-content">
+                        <form class="auth-form-content" id="auth-form-content">
+                            <div class="form-group">
+                                <input
+                                    type="text"
+                                    placeholder="UserName address"
+                                    class="form-input"
+                                    id="signupUserName"
+                                />
+                                <div class="error-message">
+                                    <i class="fas fa-info-circle"></i>
+                                    <span
+                                        >Please enter a valid email
+                                        address</span
+                                    >
+                                </div>
+                            </div>
                             <div class="form-group invalid">
                                 <input
                                     type="email"
@@ -471,7 +486,6 @@
                                     >
                                 </div>
                             </div>
-
                             <div class="form-group">
                                 <input
                                     type="password"

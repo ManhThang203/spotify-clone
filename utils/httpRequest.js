@@ -16,16 +16,22 @@ class HttpRequest {
         _option.body = JSON.stringify(data);
       }
       const res = await fetch(`${this.baseUrl}${path}`, _option);
+      const response = await res.json();
       if (!res.ok) {
         if (res.status === 429) {
           alert("Bạn đã gửi quá nhiều yêu cầu. Vui lòng thử lại.");
         }
-        throw new Error("HTTP error", res.status);
+        console.log(res);
+        const error = new Error("HTTP error", res.status);
+        // somthing error
+        error.response = response;
+        error.status = res.status;
+        throw error;
       }
-      const response = await res.json();
       return response;
     } catch (error) {
       console.log(error);
+      throw error; // văng ra 1 lỗi
     }
   }
   async get(path, options) {

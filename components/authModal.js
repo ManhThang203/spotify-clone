@@ -1,3 +1,5 @@
+import httpRequest from "../utils/httpRequest.js";
+
 const $ = document.querySelector.bind(document);
 
 export function initAuthModal() {
@@ -46,9 +48,38 @@ export function initAuthModal() {
   });
 
   document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape" && authModal?.classList.contains("show")) closeModal();
+    if (e.key === "Escape" && authModal?.classList.contains("show"))
+      closeModal();
   });
 
   showLoginBtn?.addEventListener("click", showLoginForm);
   showSignupBtn?.addEventListener("click", showSignupForm);
+
+  // xử lý sign form đăng kí đăng nhập
+  signupForm
+    .querySelector("#auth-form-content")
+    .addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const email = document.querySelector("#signupEmail").value.trim();
+      const password = document.querySelector("#signupPassword").value.trim();
+      const display_name = document.querySelector("#signupUserName").value.trim();
+      const credentials = {
+        email,
+        password,
+        display_name,
+      };
+
+      try {
+        const response = await httpRequest.post("auth/register", credentials);
+       
+        const { user, access_token } = response;
+  
+        console.log(user, access_token);
+        
+      } catch (error) {
+        if(error.response.error.code === "VALIDATION_ERROR"){
+          console.log(error.response.error.message);
+        }
+      }
+    });
 }

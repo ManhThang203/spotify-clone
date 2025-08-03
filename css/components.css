@@ -424,7 +424,6 @@
   display: flex;
   flex-wrap: wrap;
   flex-direction: row;
-
 }
 #library-content.grids-witcher .library-item {
   display: block;
