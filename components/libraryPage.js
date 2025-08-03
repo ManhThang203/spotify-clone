@@ -103,6 +103,39 @@ export class LibraryPage {
 
       this.libraryContent.innerHTML = likeSongsHtml + htmlGrid;
   }
+  // hàm Render ra giao diện GridSwitcher
+  async renderGridSwitcher() {
+    const artists = await this._callApiArtists();
+
+    const likeSongsHtml = `
+      <div class="library-item">
+        <div class="item-icon liked-songs">
+          <i class="fas fa-heart"></i>
+        </div>
+        <div class="item-info">
+          <div class="item-title">Liked Songs</div>
+          <div class="item-subtitle">
+            <i class="fas fa-thumbtack"></i>
+            Playlist...
+          </div>
+        </div>
+      </div>
+    `;
+    const htmlArtist = artists
+      .map((artist, index) => `
+        <div class="library-item" data-index="${index}">
+          <img src="${artist.image_url}" alt="${artist.name}" class="item-image" />
+          <div class="item-info">
+            <div class="item-title">${artist.name}</div>
+            <div class="item-subtitle">Artist</div>
+          </div>
+        </div>
+      `)
+      .join("");
+
+    this.libraryContent.innerHTML = likeSongsHtml + htmlArtist;
+  }
+
   // Gọi Api Artists
   async _callApiArtists(){
     const {artists} = await httpRequest.get("artists");

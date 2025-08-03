@@ -14,15 +14,14 @@ export class SortModal {
     this.btnHamburger = $("#btn-hamburger");
     this.btnGridMenu = $("#btn-grid_menu");
     this.libraryContent = $("#library-content");
+    this.btnGridSwitcher = $("#btn-Grid_Switcher");
     
-    this.itemIcon = $(".item-icon.liked-songs");
-    this.itemImage = $(".item-image");
-
     this.libraryPage = new LibraryPage(); // Khởi tạo LibraryPage
     this.isNearClicked = false; // Trạng thái nút "Gần đây"
     this.isMenuClicked = false; // Trạng thái nút "Danh sách phát"
     this.isHamburgerClicked = false; // Trạng thái nút "Hamburger"
     this.isGridMenu = false;
+    this.isGridSwitcher = false;
   }
 
   init() {
@@ -69,7 +68,7 @@ export class SortModal {
     // Thực hiện bấm vào nút sortItemNear
     this.sortItemNear?.addEventListener("click", () => {
       this.isNearClicked = true;
-      this.checkBothClicked();
+      // this.checkBothClicked();
     });
 
     // Thực hiện bấm vào nút btnMenuIcon
@@ -87,61 +86,60 @@ export class SortModal {
     // thực hiên bấm vào nút GridMenu
     this.btnGridMenu?.addEventListener("click", () => {
       this.isGridMenu = true;
-      // Lấy lại phần tử sau khi render (nếu nó render sau)
-      this.itemIcon = $(".item-icon.liked-songs");
-      this.itemImage = $(".item-image");
-
-      if (this.libraryContent) {
-        Object.assign(this.libraryContent.style, {
-          display: "flex",
-          flexWrap: "wrap",
-          flexDirection: "row",
-        });
-      }
-      if (this.itemIcon) {
-        Object.assign(this.itemIcon.style, {
-          width: "80px",
-          height: "78px",
-        });
-        // this.itemIcon.style.width = 80 + "px";
-        // this.itemIcon.style.height = 78 + "px";
-      }
-      if (this.itemImage) {
-        this.itemImage.style.width = "80px";
-        this.itemImage.style.height = "80px";
-      } else {
-        console.log("KHông tìm thấy this.itemIcon");
-      }
       this.checkGirdClicked();
     });
+    // thực hiện bấm vào nút GridSwitcher
+    this.btnGridSwitcher?.addEventListener("click", () => {
+      this.isGridSwitcher = true;
+      this.checkGridSwitcher();
+    })
+
   }
 
   // Kiểm tra và render khi cả hai nút sortItemNear và btnMenuIcon đều được bấm
   async checkBothClicked() {
-    if (this.isNearClicked && this.isMenuClicked) {
+    if (this.isMenuClicked) {
       await this.libraryPage.renderRecent(); // Render giao diện "Gần đây"
       // Reset trạng thái về false sau khi render
-      this.isNearClicked = true;
+      this.libraryContent.classList.remove("grid-view");
+      this.libraryContent.classList.remove("grids-witcher");
+      // this.isNearClicked = false;
       this.isMenuClicked = false;
     }
   }
 
   // Kiểm tra và render khi cả nút sortItemNear và btnHamburger đều được bấm
   async checkHamburgerClicked() {
-    if (this.isNearClicked && this.isHamburgerClicked) {
-      await this.libraryPage.render(); // Render giao diện mặc định
+    if (this.isHamburgerClicked) {
+      await this.libraryPage.render(); // Render giao diện 
+      this.libraryContent.classList.remove("grid-view");
+      this.libraryContent.classList.remove("grids-witcher");
       // Reset trạng thái về false sau khi render
-      this.isNearClicked = true;
+      // this.isNearClicked = false;
       this.isHamburgerClicked = false;
     }
   }
 
-  // Kiểm tra và render khi cả nút sortItemNear và btnGridMenu đều được bấm
+  // Kiểm tra và render khi cả nút btnGridMenu được bấm
   async checkGirdClicked() {
-    if (this.isNearClicked && this.isGridMenu) {
-      await this.libraryPage.renderGird(); // Render giao diện mặc định
+    if (this.isGridMenu) {
+      await this.libraryPage.renderGird(); // Render giao 
+      this.libraryContent.classList.add("grid-view");
+      this.libraryContent.classList.remove("grids-witcher");
       // Reset trạng thái về false sau khi render
-      this.isGridMenu = true;
+      this.isGridMenu = false;
+      // this.isHamburgerClicked = false;
+    }
+  }
+  // kiểm tra và render khi bấm nút btnGridSwitcher được bấm
+   async checkGridSwitcher() {
+    if (this.isGridSwitcher) {
+      await this.libraryPage.renderGridSwitcher(); // Render giao diện 
+      // this.libraryContent.classList.add("grid-view");
+      // Reset trạng thái về false sau khi render
+      this.libraryContent.classList.remove("grid-view");
+      this.libraryContent.classList.add("grids-witcher");
+      this.isGridMenu = false;
       this.isHamburgerClicked = false;
     }
   }
