@@ -1,17 +1,17 @@
-import httpRequest from '../utils/httpRequest.js';
-import { SortModal } from './sortModal.js';
+import httpRequest from "../utils/httpRequest.js";
+import { SortModal } from "./sortModal.js";
 
 const $ = document.querySelector.bind(document);
 
 export class LibraryPage {
   constructor() {
     this.libraryContent = $(".library-content");
-    this.artistsGrid = $(".artists-grid");  
+    this.artistsGrid = $(".artists-grid");
   }
   // hàm render khi bấm vào nút gần đây
-  async renderRecent(){
+  async renderRecent() {
     const artists = await this._callApiArtists();
-     const likeSongsHtml = `
+    const likeSongsHtml = `
      <div class="library-item">
           <div class="item-info">
             <div class="item-title">
@@ -21,15 +21,19 @@ export class LibraryPage {
           </div>
         </div>
     `;
-    const htmlRecent = artists.map((item) => `
+    const htmlRecent = artists
+      .map(
+        (item) => `
       <div class="library-item">
           <div class="item-info">
             <div class="item-title">${item.name}</div>
             <div class="item-subtitle">Nghệ sĩ</div>
           </div>
         </div>
-    `).join("");
-    this.libraryContent.innerHTML = likeSongsHtml +   htmlRecent;
+    `
+      )
+      .join("");
+    this.libraryContent.innerHTML = likeSongsHtml + htmlRecent;
     this.artistsGrid.innerHTML = "";
   }
   // hàm Render ra giao diện
@@ -52,7 +56,8 @@ export class LibraryPage {
     `;
 
     const htmlArtist = artists
-      .map((artist, index) => `
+      .map(
+        (artist, index) => `
         <div class="library-item" data-index="${index}">
           <img src="${artist.image_url}" alt="${artist.name}" class="item-image" />
           <div class="item-info">
@@ -60,11 +65,13 @@ export class LibraryPage {
             <div class="item-subtitle">Artist</div>
           </div>
         </div>
-      `)
+      `
+      )
       .join("");
 
     const htmlArtistsGrid = artists
-      .map((artist) => `
+      .map(
+        (artist) => `
         <div class="artist-card">
           <div class="artist-card-cover">
             <img src="${artist.image_url}" alt="${artist.name}" />
@@ -77,14 +84,16 @@ export class LibraryPage {
             <p class="artist-card-type">${artist.bio}</p>
           </div>
         </div>
-      `)
+      `
+      )
       .join("");
 
     this.libraryContent.innerHTML = likeSongsHtml + htmlArtist;
     this.artistsGrid.innerHTML = htmlArtistsGrid;
   }
   // hàm Render ra giao diện Grid
-  async renderGird(){
+  async renderGird(width) {
+    document.dispatchEvent(new CustomEvent("click:sortBtn"));
     const artists = await this._callApiArtists();
     const likeSongsHtml = `
       <div class="library-item">
@@ -94,51 +103,20 @@ export class LibraryPage {
       </div>
     `;
     const htmlGrid = artists
-      .map((artist, index) => `
+      .map(
+        (artist, index) => `
         <div class="library-item" data-index="${index}">
           <img src="${artist.image_url}" alt="${artist.name}" class="item-image" />
         </div>
-      `)
+      `
+      )
       .join("");
 
-      this.libraryContent.innerHTML = likeSongsHtml + htmlGrid;
+    this.libraryContent.innerHTML = likeSongsHtml + htmlGrid;
   }
-  // hàm Render ra giao diện GridSwitcher
-  async renderGridSwitcher() {
-    const artists = await this._callApiArtists();
-
-    const likeSongsHtml = `
-      <div class="library-item">
-        <div class="item-icon liked-songs">
-          <i class="fas fa-heart"></i>
-        </div>
-        <div class="item-info">
-          <div class="item-title">Liked Songs</div>
-          <div class="item-subtitle">
-            <i class="fas fa-thumbtack"></i>
-            Playlist...
-          </div>
-        </div>
-      </div>
-    `;
-    const htmlArtist = artists
-      .map((artist, index) => `
-        <div class="library-item" data-index="${index}">
-          <img src="${artist.image_url}" alt="${artist.name}" class="item-image" />
-          <div class="item-info">
-            <div class="item-title">${artist.name}</div>
-            <div class="item-subtitle">Artist</div>
-          </div>
-        </div>
-      `)
-      .join("");
-
-    this.libraryContent.innerHTML = likeSongsHtml + htmlArtist;
-  }
-
   // Gọi Api Artists
-  async _callApiArtists(){
-    const {artists} = await httpRequest.get("artists");
+  async _callApiArtists() {
+    const { artists } = await httpRequest.get("artists");
     return artists;
   }
 }
