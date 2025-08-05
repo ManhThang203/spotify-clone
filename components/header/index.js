@@ -33,11 +33,11 @@ class MyHeader extends HTMLElement {
   setListeners() {
     this.signupBtn = this.shadowRoot.querySelector(".signup-btn");
     this.signinBtn = this.shadowRoot.querySelector(".login-btn")
-
-
+    this.userBtn =   this.shadowRoot.querySelector("#userAvatar");
+ 
     this.signupBtn.addEventListener("click", () => this.openSignupModal());
     this.signinBtn.addEventListener("click", () => this.openloginModal());
-    
+    this.userBtn.addEventListener("click", () => this.openUserMenu());
   }
 
   openSignupModal() {
@@ -45,6 +45,9 @@ class MyHeader extends HTMLElement {
   }
    openloginModal() {
     document.dispatchEvent(new CustomEvent("open:loginModal"));
+  }
+  openUserMenu(){
+    document.dispatchEvent(new CustomEvent("open:userMenu"))
   }
 }
 

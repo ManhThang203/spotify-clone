@@ -1,0 +1,333 @@
+/* Player */
+.player {
+  grid-area: player;
+  background-color: var(--bg-secondary);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-md) var(--spacing-lg);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  z-index: var(--z-player);
+  border-top: 1px solid var(--border-color);
+}
+.player-left {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  min-width: 0;
+  flex: 1;
+  max-width: 300px;
+}
+.player-image {
+  width: 56px;
+  height: 56px;
+  border-radius: var(--radius-sm);
+  object-fit: cover;
+}
+.player-info {
+  min-width: 0;
+  flex: 1;
+}
+.player-title {
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-bottom: 2px;
+}
+.player-artist {
+  font-size: 11px;
+  color: var(--text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.player-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-sm);
+  flex: 2;
+  max-width: 722px;
+}
+.player-controls {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+.player-right {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  flex: 1;
+  justify-content: flex-end;
+  max-width: 300px;
+}
+.add-btn {
+  width: 20px;
+  height: 20px;
+  border: 1.5px solid currentColor;
+  border-radius: var(--radius-full);
+  background-color: transparent;
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition-fast);
+}
+.add-btn:hover {
+  color: var(--text-primary);
+  transform: scale(1.04);
+}
+
+.add-btn i {
+  font-size: 10px;
+}
+/* Player Controls */
+.control-btn {
+  position: relative;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-full);
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition-fast);
+}
+.control-btn:hover {
+  color: var(--text-primary);
+  transform: scale(1.04);
+}
+.control-btn:active {
+  transform: scale(0.96);
+}
+.control-btn i {
+  font-size: 16px;
+}
+.control-btn.active {
+  color: var(--accent-primary);
+}
+.control-btn.active::before {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: currentColor;
+  transform: translateX(-50%);
+}
+.play-btn-large {
+  width: 56px;
+  height: 56px;
+  border-radius: var(--radius-full);
+  background-color: var(--accent-primary);
+  color: var(--bg-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition-fast);
+}
+.play-btn-large:hover {
+  background-color: var(--accent-hover);
+  transform: scale(1.04);
+}
+.play-btn-large i {
+  font-size: 24px;
+  margin-left: 2px;
+}
+.play-btn {
+  width: 32px;
+  height: 32px;
+  background-color: var(--text-primary);
+  color: var(--bg-primary);
+}
+.play-btn:hover {
+  color: var(--bg-primary);
+  background-color: var(--text-primary);
+  transform: scale(1.04);
+}
+.play-btn i {
+  font-size: 16px;
+}
+.progress-container {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  width: 100%;
+}
+.time {
+  font-size: 11px;
+  color: var(--text-secondary);
+  min-width: 40px;
+  text-align: center;
+  font-weight: 400;
+}
+/* Progress bars */
+.progress-bar,
+.volume-bar {
+  position: relative;
+  height: 4px;
+  background-color: var(--bg-tertiary);
+  border-radius: 2px;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+.progress-bar:hover,
+.volume-bar:hover {
+  height: 6px;
+}
+
+.progress-bar:hover .progress-handle,
+.volume-bar:hover .volume-handle {
+  opacity: 1;
+}
+.progress-bar {
+  flex: 1;
+}
+.progress-fill,
+.volume-fill {
+  height: 100%;
+  background-color: var(--text-primary);
+  border-radius: 2px;
+  position: relative;
+  transition: all var(--transition-fast);
+}
+.progress-handle,
+.volume-handle {
+  position: absolute;
+  right: -6px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 12px;
+  height: 12px;
+  background-color: var(--text-primary);
+  border-radius: var(--radius-full);
+  opacity: 0;
+  transition: all var(--transition-fast);
+}
+.volume-bar {
+  width: 93px;
+}
+
+.volume-container {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+/* Tablet */
+@media (max-width: 1023px) and (min-width: 768px) {
+  .player-center {
+    flex: 1.5;
+  }
+}
+
+/* Mobile */
+@media (max-width: 767px) {
+  .app-container {
+    grid-template-areas: "player";
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr 72px;
+    gap: 0;
+    padding: 0;
+  }
+  .player-left {
+    display: none;
+  }
+  .player {
+    border-radius: 0;
+    padding: var(--spacing-md);
+    border-top: 1px solid var(--border-color);
+  }
+  .player-left {
+    flex: 0 0 auto;
+    min-width: 120px;
+    max-width: 150px;
+  }
+  .player-image {
+    width: 48px;
+    height: 48px;
+  }
+  .player-info {
+    max-width: 100px;
+  }
+  .player-title {
+    font-size: 12px;
+  }
+  .player-artist {
+    font-size: 10px;
+  }
+  .player-center {
+    flex: 1;
+    max-width: none;
+  }
+  .player-controls {
+    gap: var(--spacing-sm);
+  }
+  .player-right {
+    flex: 0 0 auto;
+    gap: var(--spacing-sm);
+    max-width: 120px;
+  }
+  .player-left {
+    min-width: 100px;
+    max-width: 120px;
+  }
+  .player-info {
+    max-width: 80px;
+  }
+  .player-right .control-btn:not(:nth-child(2)) {
+    display: none;
+  }
+  .control-btn {
+    width: 28px;
+    height: 28px;
+  }
+
+  .control-btn i {
+    font-size: 14px;
+  }
+  .play-btn-large {
+    width: 48px;
+    height: 48px;
+  }
+  .play-btn-large i {
+    font-size: 20px;
+  }
+  .play-btn {
+    width: 32px;
+    height: 32px;
+  }
+  .play-btn i {
+    font-size: 14px;
+  }
+  .progress-container {
+    gap: var(--spacing-sm);
+  }
+  .time {
+    font-size: 10px;
+    min-width: 32px;
+  }
+  .volume-container {
+    display: none;
+  }
+}
+
+/* Hover states for touch devices */
+@media (hover: none) {
+  .progress-handle,
+  .volume-handle {
+    opacity: 1;
+  }
+}
+/* Print styles */
+@media print {
+  .player {
+    display: none;
+  }
+}

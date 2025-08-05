@@ -8,7 +8,6 @@ class sidebar extends HTMLElement{
     }
     async render(){
         const data = await this.getHTMLString(); 
-        console.log(data);
         this.shadowRoot.innerHTML = data;
 
     }

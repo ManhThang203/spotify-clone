@@ -1,15 +1,3 @@
-.app-container {
-  display: grid;
-  grid-template-areas:
-    "sidebar main";
-  grid-template-columns: 280px 1fr;
-  grid-template-rows: 1fr 72px;
-  height: 100vh;
-  gap: var(--spacing-sm);
-  padding: var(--spacing-sm);
-  background-color: var(--bg-primary);
-}
-
 /* Sidebar */
 .sidebar {
   grid-area: sidebar;

@@ -7,7 +7,7 @@ class AuthModal extends HTMLElement {
     super();
     this.attachShadow({ mode: "open" });
   }
-  // Được gọi khi modal được thêm vào Dom
+  // Được gọi khi  được thêm vào Dom
   connectedCallback() {
     this.render();
   }
