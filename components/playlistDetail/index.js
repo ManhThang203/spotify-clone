@@ -11,7 +11,6 @@ class Playlist extends HTMLElement {
 
   async render() {
     const data = await this.getPlaylist();
-
     // this.shadowRoot sẽ them chiếu tới shadow DOM
     this.shadowRoot.innerHTML = data;
   }

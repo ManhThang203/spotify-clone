@@ -79,7 +79,7 @@
 }
 
 .modal-content {
-  padding: var(--spacing-2xl) var(--spacing-xl);
+  padding: var(--spacing-xl) var(--spacing-lg);
   text-align: center;
 }
 

@@ -66,6 +66,7 @@
   max-width: 300px;
 }
 .add-btn {
+  position: relative;
   width: 20px;
   height: 20px;
   border: 1.5px solid currentColor;
@@ -80,6 +81,18 @@
 .add-btn:hover {
   color: var(--text-primary);
   transform: scale(1.04);
+}
+.tooltip-add {
+  position: absolute;
+  top: -32px;
+  min-width: 180px;
+  padding: 5px;
+  border-radius: var(--radius-md);
+  color: #fff;
+  font-weight: 500;
+  opacity: 0;
+  background: #2c2c2c;
+  transition: all 0.2s ease;
 }
 
 .add-btn i {
@@ -121,6 +134,53 @@
   background: currentColor;
   transform: translateX(-50%);
 }
+.tooltip-base {
+  position: absolute;
+  top: -32px;
+  padding: 5px;
+  border-radius: var(--radius-md);
+  color: #fff;
+  font-weight: 500;
+  opacity: 0;
+  background: #2c2c2c;
+  transition: all 0.2s ease;
+}
+.tooltip-Shuffle {
+  min-width: 150px;
+}
+.tooltip-prev {
+  min-width: 50px;
+}
+.tooltip-play {
+  min-width: 86px;
+}
+.tooltip-loop {
+  min-width: 157px;
+}
+.tooltip-voice {
+  min-width: 84px;
+}
+.tooltip-noice {
+  min-width: 70px;
+}
+.tooltip-screen {
+  top: -26px;
+  right: -23px;
+  min-width: 200px;
+}
+
+.tooltip-Shuffle.active,
+.tooltip-prev.active,
+.tooltip-play.active,
+.tooltip-next.active,
+.tooltip-loop.active,
+.tooltip-voice.active,
+.tooltip-noice.active,
+.tooltip-screen.active,
+.tooltip-add.active {
+  opacity: 1;
+}
+
 .play-btn-large {
   width: 56px;
   height: 56px;

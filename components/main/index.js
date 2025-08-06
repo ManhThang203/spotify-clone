@@ -10,17 +10,14 @@ class MyHome extends HTMLElement {
 
   async render() {
     const data = await this.getHTMLString();
-      this.shadowRoot.innerHTML = data;
-  }
-  
-  async getHTMLString() {
-    const res = await fetch("./components/main/main.html");
-    console.log(res);
-    const data = await res.text();
-    console.log(data);
-    return data;
+    this.shadowRoot.innerHTML = data;
   }
 
+  async getHTMLString() {
+    const res = await fetch("./components/main/main.html");
+    const data = await res.text();
+    return data;
+  }
 }
 
 customElements.define("my-home", MyHome);

@@ -1,5 +1,5 @@
-<link rel="stylesheet" href="./css/reset.css" />
-<link rel="stylesheet" href="./css/variables.css" />
+<link rel="stylesheet" href="./assets/css/reset.css" />
+<link rel="stylesheet" href="./assets/css/variables.css" />
 <link
   rel="stylesheet"
   href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
@@ -7,63 +7,72 @@
 <link rel="stylesheet" href="./components/controller/style.css" />
 
 <!-- Bottom Player -->
-  <div class="player-left">
-    <img
-      src="placeholder.svg?height=56&width=56"
-      alt="Current track"
-      class="player-image"
-    />
-    <div class="player-info">
-      <div class="player-title">Yêu Một Người Sao Buồn Đến Thế</div>
-      <div class="player-artist">Noo Phước Thịnh</div>
-    </div>
-    <button class="add-btn">
-      <i class="fa-solid fa-plus"></i>
-    </button>
+<div class="player-left">
+  <img
+    src="placeholder.svg?height=56&width=56"
+    alt="Current track"
+    class="player-image"
+  />
+  <div class="player-info">
+    <div class="player-title">Yêu Một Người Sao Buồn Đến Thế</div>
+    <div class="player-artist">Noo Phước Thịnh</div>
   </div>
+  <button class="add-btn">
+    <i class="fa-solid fa-plus"></i>
+    <p class="tooltip-add">Thêm vào bài hát đã thích</p>
+  </button>
+</div>
 
-  <div class="player-center">
-    <div class="player-controls">
-      <button class="control-btn active">
-        <i class="fas fa-random"></i>
-      </button>
-      <button class="control-btn">
-        <i class="fas fa-step-backward"></i>
-      </button>
-      <button class="control-btn play-btn">
-        <i class="fas fa-pause"></i>
-      </button>
-      <button class="control-btn">
-        <i class="fas fa-step-forward"></i>
-      </button>
-      <button class="control-btn">
-        <i class="fas fa-redo"></i>
-      </button>
-    </div>
-    <div class="progress-container">
-      <span class="time">0:52</span>
-      <div class="progress-bar">
-        <div class="progress-fill" style="width: 20%"></div>
-        <div class="progress-handle"></div>
-      </div>
-      <span class="time">4:59</span>
-    </div>
+<div class="player-center">
+  <div class="player-controls">
+    <button class="control-btn active btn-Shuffle">
+      <i class="fas fa-random"></i>
+      <p class="tooltip-Shuffle tooltip-base">Bật tính năng trộn bài</p>
+    </button>
+    <button class="control-btn btn-prev">
+      <i class="fas fa-step-backward"></i>
+      <p class="tooltip-prev tooltip-base">Trước</p>
+    </button>
+    <button class="control-btn play-btn">
+      <i class="fas fa-pause"></i>
+      <p class="tooltip-play tooltip-base">Tạm dừng</p>
+    </button>
+    <button class="control-btn btn-next">
+      <i class="fas fa-step-forward"></i>
+      <p class="tooltip-next tooltip-base">Tiếp</p>
+    </button>
+    <button class="control-btn btn-loop">
+      <i class="fas fa-redo"></i>
+      <p class="tooltip-loop tooltip-base">Kích hoạt chế độ lặp lại</p>
+    </button>
   </div>
+  <div class="progress-container">
+    <span class="time">0:52</span>
+    <div class="progress-bar">
+      <div class="progress-fill" style="width: 20%"></div>
+      <div class="progress-handle"></div>
+    </div>
+    <span class="time">4:59</span>
+  </div>
+</div>
 
-  <div class="player-right">
-    <button class="control-btn">
-      <i class="fas fa-microphone"></i>
+<div class="player-right">
+  <button class="control-btn btn-voice">
+    <i class="fas fa-microphone"></i>
+    <p class="tooltip-voice tooltip-base">Lời bài hát</p>
+  </button>
+  <div class="volume-container">
+    <button class="control-btn btn-noice">
+      <i class="fas fa-volume-down"></i>
+      <p class="tooltip-noice tooltip-base">Tắt tiếng</p>
     </button>
-    <div class="volume-container">
-      <button class="control-btn">
-        <i class="fas fa-volume-down"></i>
-      </button>
-      <div class="volume-bar">
-        <div class="volume-fill" style="width: 70%"></div>
-        <div class="volume-handle"></div>
-      </div>
+    <div class="volume-bar">
+      <div class="volume-fill" style="width: 70%"></div>
+      <div class="volume-handle"></div>
     </div>
-    <button class="control-btn">
-      <i class="fas fa-expand"></i>
-    </button>
   </div>
+  <button class="control-btn btn-screen">
+    <i class="fas fa-expand"></i>
+    <p class="tooltip-screen tooltip-base">Mở chế độ toàn mà hình</p>
+  </button>
+</div>

@@ -1,7 +1,11 @@
+import httpRequest from "../../utils/httpRequest.js";
 class AuthModal extends HTMLElement {
   modalOverlay;
   signupForm;
   loginForm;
+  signupUserName;
+  signupEmail;
+  signupPassword;
   model = "login";
   constructor() {
     super();
@@ -18,6 +22,9 @@ class AuthModal extends HTMLElement {
     this.loginForm = this.shadowRoot.querySelector("#loginForm");
     this.showSignup = this.shadowRoot.querySelector("#showSignup");
     this.showLogin = this.shadowRoot.querySelector("#showLogin");
+    this.signupUserName = this.shadowRoot.querySelector("#signupUserName");
+    this.signupEmail = this.shadowRoot.querySelector("#signupEmail");
+    this.signupPassword = this.shadowRoot.querySelector("#signupPassword");
   }
   // lấy ra chuỗi html SignIn
   async getHTMLSignIn() {
@@ -75,6 +82,38 @@ class AuthModal extends HTMLElement {
     this.modalOverlay.addEventListener("click", (e) => {
       if (!e.target.closest(".modal-content")) {
         this.close();
+      }
+    });
+
+    // đăng kí
+    this.signupForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      this.close();
+      const display_name = this.signupUserName.value;
+      const email = this.signupEmail.value;
+      const password = this.signupPassword.value;
+
+      const credentials = {
+        display_name,
+        email,
+        password,
+      };
+      try {
+        const { user, access_token } = await httpRequest.post(
+          "auth/register",
+          credentials
+        );
+        localStorage.setItem("accessToken", access_token);
+      } catch (error) {
+        console.dir(error);
+        if (error?.response?.error?.code === "VALIDATION_ERROR") {
+          const details = error.response.error.details;
+          if (details && details.length > 0) {
+            console.log(details[0].message);
+          } else {
+            console.log("Validation failed but no details provided");
+          }
+        }
       }
     });
   }

@@ -12,6 +12,11 @@ class HttpRequest {
           "Content-Type": "application/json",
         },
       };
+      const accessToken = localStorage.getItem("accessToken");
+      if (accessToken) {
+        _option.headers.Authorization = `Bearer ${accessToken}`;
+      }
+
       if (data) {
         _option.body = JSON.stringify(data);
       }
@@ -21,7 +26,6 @@ class HttpRequest {
         if (res.status === 429) {
           alert("Bạn đã gửi quá nhiều yêu cầu. Vui lòng thử lại.");
         }
-        console.log(res);
         const error = new Error("HTTP error", res.status);
         // somthing error
         error.response = response;
