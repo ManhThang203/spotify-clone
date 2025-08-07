@@ -25,6 +25,54 @@ class AuthModal extends HTMLElement {
     this.signupUserName = this.shadowRoot.querySelector("#signupUserName");
     this.signupEmail = this.shadowRoot.querySelector("#signupEmail");
     this.signupPassword = this.shadowRoot.querySelector("#signupPassword");
+    this.formGroup = this.signupForm.querySelectorAll(".form-group");
+    this.loginForm = this.shadowRoot.querySelector("#loginForm");
+    this.loginEmail = this.shadowRoot.querySelector("#loginEmail");
+    this.loginPassword = this.shadowRoot.querySelector("#loginPassword");
+
+    this.signupUserName.addEventListener("input", () => {
+      const isHollow = this.signupUserName.value.trim() !== "";
+      if (isHollow) {
+        this.signupUserName.closest(".form-group").classList.remove("invalid");
+      } else {
+        this.signupUserName.closest(".form-group").classList.add("invalid");
+      }
+    });
+    this.signupEmail.addEventListener("input", () => {
+      //  /^[^\s@]+@[^\s@]+\.[^\s@]+$/ định dạnh email
+      const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(this.signupEmail.value);
+      if (isEmail) {
+        this.signupEmail.closest(".form-group").classList.remove("invalid");
+      } else {
+        this.signupEmail.closest(".form-group").classList.add("invalid");
+      }
+    });
+    this.signupPassword.addEventListener("input", () => {
+      const isPassword = this.signupPassword.value.length > 6;
+      if (isPassword) {
+        this.signupPassword.closest(".form-group").classList.remove("invalid");
+      } else {
+        this.signupPassword.closest(".form-group").classList.add("invalid");
+      }
+    });
+
+    this.loginEmail.addEventListener("input", () => {
+      //  /^[^\s@]+@[^\s@]+\.[^\s@]+$/ định dạnh email
+      const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(this.loginEmail.value);
+      if (isEmail) {
+        this.loginEmail.closest(".form-group").classList.remove("invalid");
+      } else {
+        this.loginEmail.closest(".form-group").classList.add("invalid");
+      }
+    });
+    this.loginPassword.addEventListener("input", () => {
+      const isPassword = this.loginPassword.value.length > 6;
+      if (isPassword) {
+        this.loginPassword.closest(".form-group").classList.remove("invalid");
+      } else {
+        this.loginPassword.closest(".form-group").classList.add("invalid");
+      }
+    });
   }
   // lấy ra chuỗi html SignIn
   async getHTMLSignIn() {
@@ -39,6 +87,7 @@ class AuthModal extends HTMLElement {
     this.getElements();
     this.setListeners();
     this.showModal();
+    // this.handleSignup();
   }
 
   showModal() {
@@ -85,38 +134,123 @@ class AuthModal extends HTMLElement {
       }
     });
 
-    // đăng kí
-    this.signupForm.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      this.close();
-      const display_name = this.signupUserName.value;
-      const email = this.signupEmail.value;
-      const password = this.signupPassword.value;
-
-      const credentials = {
-        display_name,
-        email,
-        password,
-      };
-      try {
-        const { user, access_token } = await httpRequest.post(
-          "auth/register",
-          credentials
-        );
-        localStorage.setItem("accessToken", access_token);
-      } catch (error) {
-        console.dir(error);
-        if (error?.response?.error?.code === "VALIDATION_ERROR") {
-          const details = error.response.error.details;
-          if (details && details.length > 0) {
-            console.log(details[0].message);
-          } else {
-            console.log("Validation failed but no details provided");
-          }
-        }
-      }
+    // khi bấm vào nút submit đăng kí
+    this.signupForm.addEventListener("submit", (e) => {
+      this.handleSignup(e);
+    });
+    // khi bấm vào nút submit đăng nhập
+    this.loginForm.addEventListener("submit", (e) => {
+      this.handleLogin(e);
     });
   }
+  // hàm xử lý đăng kí
+  handleSignup = async (e) => {
+    e.preventDefault();
+    const display_name = this.signupUserName.value;
+    const email = this.signupEmail.value;
+    const password = this.signupPassword.value;
+
+    const credentials = {
+      display_name,
+      email,
+      password,
+    };
+    try {
+      const { user, access_token } = await httpRequest.post(
+        "auth/register",
+        credentials
+      );
+      localStorage.setItem("accessToken", access_token);
+      // khi đanh ksi thành công
+      document.dispatchEvent(new CustomEvent("signUp:success"));
+      this.close();
+    } catch (error) {
+      console.dir(error);
+      if (error?.response?.error?.code === "VALIDATION_ERROR") {
+        const details = error.response.error.details;
+        if (details) {
+          details.forEach((d) => {
+            const { field, message } = d;
+            let inputElement;
+            switch (field) {
+              case "display_name":
+                inputElement = this.signupUserName;
+                break;
+              case "email":
+                inputElement = this.signupEmail;
+                break;
+              case "password":
+                inputElement = this.signupPassword;
+                break;
+              default:
+                break;
+            }
+            if (inputElement) {
+              const group = inputElement.closest(".form-group");
+              group.classList.add("invalid");
+              const errorMessengerSpan = group.querySelector("span");
+              errorMessengerSpan.textContent = message;
+            }
+          });
+        }
+      } else if (error?.response?.error?.code === "EMAIL_EXISTS") {
+        const message = error.response.error.message;
+        const group = this.signupEmail.closest(".form-group");
+        group.classList.add("invalid");
+        const errorEmailSpan = group.querySelector("span");
+        errorEmailSpan.textContent = message;
+      }
+    }
+  };
+  // hàm sử lý đăng nhập
+  handleLogin = async (e) => {
+    e.preventDefault();
+    const email = this.loginEmail.value;
+    const password = this.loginPassword.value;
+    console.log(email, password);
+
+    const credentials = {
+      email,
+      password,
+    };
+    try {
+      const { user, access_token } = await httpRequest.post(
+        "auth/login",
+        credentials
+      );
+      localStorage.setItem("accessToken", access_token);
+      // khi đanh ksi thành công
+      document.dispatchEvent(new CustomEvent("login:success"));
+      this.close();
+    } catch (error) {
+      console.dir(error);
+      if (error?.response?.error?.code === "VALIDATION_ERROR") {
+        const details = error.response.error.details;
+        if (details) {
+          details.forEach((d) => {
+            const { field, message } = d;
+            let inputElement;
+            switch (field) {
+              case "email":
+                inputElement = this.loginEmail;
+                break;
+              case "password":
+                inputElement = this.loginPassword;
+                break;
+              default:
+                break;
+            }
+            if (inputElement) {
+              const group = inputElement.closest(".form-group");
+              group.classList.add("invalid");
+              const errorMessengerSpan = group.querySelector("span");
+              errorMessengerSpan.textContent = message;
+            }
+          });
+        }
+      }
+    }
+  };
 }
 
 customElements.define("auth-modal", AuthModal);

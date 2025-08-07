@@ -4,6 +4,7 @@ import "./components/main/index.js";
 import "./components/playlistDetail/index.js";
 import "./components/sidebar/sidebar.js";
 import "./components/controller/controller.js";
+import "./components/Toast/Toast.js";
 
 // tạo 1 element là auth-modal
 const authModal = document.createElement("auth-modal");

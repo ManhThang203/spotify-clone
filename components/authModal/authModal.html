@@ -23,17 +23,19 @@
           <div class="form-group">
             <input
               type="text"
-              placeholder="User name address"
+              placeholder="Display name address"
               class="form-input"
               id="signupUserName"
             />
             <div class="error-message">
               <i class="fas fa-info-circle"></i>
-              <span>Please enter a valid email address</span>
+              <span class="error-email_address"
+                >Please enter a valid email address</span
+              >
             </div>
           </div>
 
-          <div class="form-group invalid">
+          <div class="form-group">
             <input
               type="email"
               placeholder="Email address"
@@ -42,7 +44,9 @@
             />
             <div class="error-message">
               <i class="fas fa-info-circle"></i>
-              <span>Please enter a valid email address</span>
+              <span class="error-email"
+                >Please enter a valid email address</span
+              >
             </div>
           </div>
 
@@ -55,7 +59,9 @@
             />
             <div class="error-message">
               <i class="fas fa-info-circle"></i>
-              <span>Password must be at least 8 characters</span>
+              <span class="error-password"
+                >Password must be at least 8 characters</span
+              >
             </div>
           </div>
 
@@ -73,7 +79,7 @@
         <h1 class="modal-heading">Log in to Spotify</h1>
 
         <form class="auth-form-content">
-          <div class="form-group invalid">
+          <div class="form-group">
             <input
               type="email"
               placeholder="Email address"

@@ -15,6 +15,7 @@ class MyHeader extends HTMLElement {
   constructor() {
     super();
     this.attachShadow({ mode: "open" });
+    this.hanndleLogOut();
   }
 
   connectedCallback() {
@@ -25,11 +26,6 @@ class MyHeader extends HTMLElement {
     const data = await this.getHTMLString();
     this.shadowRoot.innerHTML = data;
     this.setListeners();
-    const accessToken = localStorage.getItem("accessToken");
-    if (accessToken) {
-    }
-    this.hanndleSignUp();
-    // document.addEventListener("signUp:success", () => {});
     this.hanndleSignUp();
   }
 
@@ -52,6 +48,8 @@ class MyHeader extends HTMLElement {
     this.authButtons = this.shadowRoot.querySelector(".auth-buttons");
     this.userName = this.shadowRoot.querySelector(".user-name");
     this.avatarImg = this.userBtn.querySelector("img");
+    this.userInfo = this.shadowRoot.querySelector(".user-info");
+    this.userDropdown = this.shadowRoot.querySelector("#userDropdown");
 
     this.signupBtn.addEventListener("click", () => this.openSignupModal());
     this.signinBtn.addEventListener("click", () => this.openloginModal());
@@ -63,6 +61,16 @@ class MyHeader extends HTMLElement {
 
     this.userBtn.addEventListener("mouseleave", () => {
       this.userName.classList.remove("active");
+    });
+
+    document.addEventListener("signUp:success", () => {
+      this.hanndleSignUp();
+    });
+    document.addEventListener("login:success", () => {
+      this.hanndleSignUp();
+    });
+    this.userDropdown.addEventListener("click", (e) => {
+      this.hanndleLogOut();
     });
   }
 
@@ -83,22 +91,38 @@ class MyHeader extends HTMLElement {
       }
     });
   }
-  // xử lý đăng nhập
+  // xử lý đăng ký
   async hanndleSignUp() {
     try {
       const { user } = await httpRequest.get("users/me");
-      console.log(user);
       if (user.display_name) {
         this.userName.textContent = user.display_name;
       }
       if (user.avatar_url) {
         this.avatarImg.src = user.avatar_url;
       }
+      this.authButtons.classList.remove("show");
+      this.userInfo.appendChild(this.userDropdown);
+      this.userInfo.append(this.userBtn, this.userName);
     } catch (error) {
       this.authButtons.classList.add("show");
       this.userBtn.remove();
       this.userName.remove();
     }
+  }
+  // xử lý đang xuất
+  async hanndleLogOut() {
+    try {
+      const { message } = await httpRequest.post("auth/logout");
+      if (message) {
+        localStorage.removeItem("accessToken");
+        this.authButtons.classList.add("show");
+        this.userBtn.remove();
+        this.userName.remove();
+        this.userDropdown.remove();
+        document.dispatchEvent(new CustomEvent("logout:success"));
+      }
+    } catch (error) {}
   }
 }
 

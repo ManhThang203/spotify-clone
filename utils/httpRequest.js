@@ -26,6 +26,11 @@ class HttpRequest {
         if (res.status === 429) {
           alert("Bạn đã gửi quá nhiều yêu cầu. Vui lòng thử lại.");
         }
+        if (res.status === 401) {
+          console.log("token không hợp lệ . Vui lòng Đăng nhập lại");
+        } else if (res.status === 400) {
+          console.log("kiểm tra lại kiểu dữ liệu");
+        }
         const error = new Error("HTTP error", res.status);
         // somthing error
         error.response = response;
