@@ -15,7 +15,6 @@ class MyHeader extends HTMLElement {
   constructor() {
     super();
     this.attachShadow({ mode: "open" });
-    this.hanndleLogOut();
   }
 
   connectedCallback() {
@@ -27,6 +26,7 @@ class MyHeader extends HTMLElement {
     this.shadowRoot.innerHTML = data;
     this.setListeners();
     this.hanndleSignUp();
+    this.hanndleLogOut();
   }
 
   async getHTMLString() {
@@ -71,6 +71,7 @@ class MyHeader extends HTMLElement {
     });
     this.userDropdown.addEventListener("click", (e) => {
       this.hanndleLogOut();
+      document.dispatchEvent(new CustomEvent("logout:success"));
     });
   }
 
@@ -120,7 +121,6 @@ class MyHeader extends HTMLElement {
         this.userBtn.remove();
         this.userName.remove();
         this.userDropdown.remove();
-        document.dispatchEvent(new CustomEvent("logout:success"));
       }
     } catch (error) {}
   }

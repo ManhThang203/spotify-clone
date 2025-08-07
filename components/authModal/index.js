@@ -29,6 +29,9 @@ class AuthModal extends HTMLElement {
     this.loginForm = this.shadowRoot.querySelector("#loginForm");
     this.loginEmail = this.shadowRoot.querySelector("#loginEmail");
     this.loginPassword = this.shadowRoot.querySelector("#loginPassword");
+    this.formInfo = this.shadowRoot.querySelector(".form-info");
+    this.signupEyeIcon = this.shadowRoot.querySelector("#signupEyeIcon");
+    this.loginEyeIcon = this.shadowRoot.querySelector("#loginEyeIcon");
 
     this.signupUserName.addEventListener("input", () => {
       const isHollow = this.signupUserName.value.trim() !== "";
@@ -72,6 +75,12 @@ class AuthModal extends HTMLElement {
       } else {
         this.loginPassword.closest(".form-group").classList.add("invalid");
       }
+    });
+    this.signupEyeIcon.addEventListener("click", () => {
+      this.togglPasword(this.signupPassword, this.signupEyeIcon);
+    });
+    this.loginEyeIcon.addEventListener("click", () => {
+      this.togglPasword(this.loginPassword, this.loginEyeIcon);
     });
   }
   // lấy ra chuỗi html SignIn
@@ -207,8 +216,6 @@ class AuthModal extends HTMLElement {
     e.preventDefault();
     const email = this.loginEmail.value;
     const password = this.loginPassword.value;
-    console.log(email, password);
-
     const credentials = {
       email,
       password,
@@ -251,6 +258,14 @@ class AuthModal extends HTMLElement {
       }
     }
   };
+  // xử lý bấm hiện mật khẩu
+  togglPasword(paswordInput, eyesicon) {
+    const isHiddenPassword = paswordInput.type === "password";
+    paswordInput.type = isHiddenPassword ? "text" : "password";
+    eyesicon.className = isHiddenPassword
+      ? "fa-regular fa-eye eye-icon"
+      : "fa-regular fa-eye-slash eye-icon";
+  }
 }
 
 customElements.define("auth-modal", AuthModal);

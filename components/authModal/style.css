@@ -201,3 +201,14 @@
 .auth-link:hover {
   color: var(--accent-primary);
 }
+.form-info {
+  position: relative;
+}
+.form-info i {
+  position: absolute;
+  top: 50%;
+  right: 25px;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: var(--text-secondary);
+}
