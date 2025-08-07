@@ -6,8 +6,12 @@ class MyHome extends HTMLElement {
 
   connectedCallback() {
     this.render();
+    this.getElements();
   }
-
+  getElements() {
+    this.contentWrapper = this.shadowRoot.querySelector(".content-wrapper");
+    console.log(this.contentWrapper);
+  }
   async render() {
     const data = await this.getHTMLString();
     this.shadowRoot.innerHTML = data;
@@ -17,6 +21,12 @@ class MyHome extends HTMLElement {
     const res = await fetch("./components/main/main.html");
     const data = await res.text();
     return data;
+  }
+  open() {
+    document.querySelector(".content-wrapper").prepend(this);
+  }
+  close() {
+    this.remove(this);
   }
 }
 

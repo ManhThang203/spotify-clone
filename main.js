@@ -8,7 +8,7 @@ import "./components/toast/toast.js";
 
 // tạo 1 element là auth-modal
 const authModal = document.createElement("auth-modal");
-const userMenu = document.createElement("user-menu");
+const myHome = document.createElement("my-home");
 // mở form đăng kí
 document.addEventListener("open:signupModal", () => {
   authModal.open("signup");
@@ -16,4 +16,9 @@ document.addEventListener("open:signupModal", () => {
 // mở form đăng nhập
 document.addEventListener("open:loginModal", () => {
   authModal.open("login");
+});
+
+document.addEventListener("logout:success", () => {
+  myHome.open();
+  myHome.close();
 });
