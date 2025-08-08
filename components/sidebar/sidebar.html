@@ -30,13 +30,57 @@
     <button class="search-library-btn">
       <i class="fas fa-search"></i>
     </button>
-    <button class="sort-btn">
-      Recents
-      <i class="fas fa-list"></i>
-    </button>
+    <div class="sort-modal">
+      <button class="sort-btn" id="sort-btn">
+        Recents
+        <i class="fas fa-list"></i>
+      </button>
+      <div class="sort-form" id="sort-form">
+        <div class="sort-header">
+          <h3 class="title-header">Sắp xếp theo</h3>
+        </div>
+        <div class="sort-content" id="sort-content">
+          <div class="btn-near" id="btn-near">
+            <p>gần đây</p>
+            <i class="fa-solid fa-check icon-check" id="icon-check"></i>
+          </div>
+          <div class="btn-add">
+            <p>Mới thêm gần đây</p>
+            <i class="fa-solid fa-check icon-check" id="icon-check"></i>
+          </div>
+          <div class="btn-rank">
+            <p>Thứ tự chữ cái</p>
+            <i class="fa-solid fa-check icon-check" id="icon-check"></i>
+          </div>
+          <div class="btn-creative">
+            <p>người sáng tạo</p>
+            <i class="fa-solid fa-check icon-check" id="icon-check"></i>
+          </div>
+        </div>
+        <div class="sort-footer">
+          <h3 class="title-footer">xem dưới dạng</h3>
+          <div class="btn-form">
+            <div class="content" id="content">
+              <button class="btn-hamburger" id="btn-hamburger">
+                <i class="fa-solid fa-bars"></i>
+              </button>
+              <button class="btn-list">
+                <i class="fa-solid fa-list-ul"></i>
+              </button>
+              <button class="btn-Burger">
+                <i class="fas fa-th"></i>
+              </button>
+              <button class="btn-grid">
+                <i class="fas fa-grip"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 
-  <div class="library-content">
+  <div class="library-content" id="library-content">
     <div class="library-item active">
       <div class="item-icon liked-songs">
         <i class="fas fa-heart"></i>
