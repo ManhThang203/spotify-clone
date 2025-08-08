@@ -1,4 +1,4 @@
-import httpRequest from '../utils/httpRequest.js';
+import httpRequest from "../utils/httpRequest.js";
 
 const $ = document.querySelector.bind(document);
 const $$ = document.querySelectorAll.bind(document);
@@ -36,12 +36,12 @@ export class TrackMusic {
   }
 
   async _fetchApiTrack() {
-    const {tracks } = await httpRequest.get("tracks"); // Thay đổi để phù hợp với API trả về data
+    const { tracks } = await httpRequest.get("tracks"); // Thay đổi để phù hợp với API trả về data
     return tracks;
   }
 
   async _fetchApiArtists() {
-    const {artists } = await httpRequest.get("artists"); // Thay đổi để phù hợp với API trả về data
+    const { artists } = await httpRequest.get("artists"); // Thay đổi để phù hợp với API trả về data
     return artists;
   }
 
@@ -66,7 +66,8 @@ export class TrackMusic {
   async _render() {
     const track = await this._fetchApiTrack();
     const html = track
-      .map((track, index) => `
+      .map(
+        (track, index) => `
         <div class="track-item">
           <div class="track-number">${index + 1}</div>
           <div class="track-image">
@@ -81,7 +82,8 @@ export class TrackMusic {
             <i class="fas fa-ellipsis-h"></i>
           </button>
         </div>
-      `)
+      `
+      )
       .join("");
     this._trackList.innerHTML = html;
   }

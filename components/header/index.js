@@ -50,6 +50,7 @@ class MyHeader extends HTMLElement {
     this.avatarImg = this.userBtn.querySelector("img");
     this.userInfo = this.shadowRoot.querySelector(".user-info");
     this.userDropdown = this.shadowRoot.querySelector("#userDropdown");
+    this.btnHome = this.shadowRoot.querySelector("#btn-home");
 
     this.signupBtn.addEventListener("click", () => this.openSignupModal());
     this.signinBtn.addEventListener("click", () => this.openloginModal());
@@ -72,6 +73,9 @@ class MyHeader extends HTMLElement {
     this.userDropdown.addEventListener("click", (e) => {
       this.hanndleLogOut();
       document.dispatchEvent(new CustomEvent("logout:success"));
+    });
+    this.btnHome.addEventListener("click", () => {
+      document.dispatchEvent(new CustomEvent("navigateToMyHome"));
     });
   }
 

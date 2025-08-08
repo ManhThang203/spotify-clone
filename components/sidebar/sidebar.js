@@ -1,6 +1,9 @@
 import httpRequest from "../../utils/httpRequest.js";
 
 class sidebar extends HTMLElement {
+  isNearClicked = false;
+  isHamburgerClicked = false; // Trạng thái nút "Hamburger"
+
   constructor() {
     super();
     this.attachShadow({ mode: "open" });
@@ -20,6 +23,8 @@ class sidebar extends HTMLElement {
     this.libraryContent = this.shadowRoot.querySelector("#library-content");
     this.btnNear = this.shadowRoot.querySelector("#btn-near");
     this.btnHamburger = this.shadowRoot.querySelector("#btn-hamburger");
+    this.btnList = this.shadowRoot.querySelector("#btn-list");
+    this.logo = this.shadowRoot.querySelector("#logo");
 
     this.sortBtn.addEventListener("click", (e) => {
       e.stopPropagation();
@@ -46,7 +51,6 @@ class sidebar extends HTMLElement {
         if (icon) {
           icon.classList.add("active");
         }
-        const value = item.textContent.trim().toLowerCase();
       });
     });
     this.buttonForm.forEach((item, index) => {
@@ -55,12 +59,26 @@ class sidebar extends HTMLElement {
         item.classList.add("active");
       });
     });
+    this.btnNear.addEventListener("click", () => {
+      this.isNearClicked = true;
+    });
+    this.btnHamburger.addEventListener("click", () => {
+      this.renderRecent();
+    });
+    this.btnList.addEventListener("click", () => {
+      this.renderList();
+    });
+    this.logo.addEventListener("click", () => {
+      document.dispatchEvent(new CustomEvent("navigateToMyHome"));
+    });
   }
+
   async render() {
     const data = await this.getHTMLString();
     this.shadowRoot.innerHTML = data;
     this.setListeners();
-    this.renderRecent();
+    this.renderList();
+    // this.renderRecent();
   }
   async getHTMLString() {
     const res = await fetch("./components/sidebar/sidebar.html");
@@ -98,6 +116,50 @@ class sidebar extends HTMLElement {
       .join("");
     this.libraryContent.innerHTML = likeSongsHtml + htmlRecent;
     // this.artistsGrid.innerHTML = "";
+  }
+  async renderList() {
+    const { artists } = await httpRequest.get("artists");
+    const likeSongsHtml = `
+    <div class="library-item active">
+      <div class="item-icon liked-songs">
+        <i class="fas fa-heart"></i>
+      </div>
+      <div class="item-info">
+        <div class="item-title">Bài hát yêu thích</div>
+        <div class="item-subtitle">
+          <i class="fas fa-thumbtack"></i>
+          Playlist • 3 songs
+        </div>
+      </div>
+    </div>
+    `;
+    const htmlRecent = artists
+      .map(
+        (item) => `
+     <div class="library-item">
+      <img
+        src="${item.image_url}"
+        alt="${item.name}"
+        class="item-image"
+      />
+      <div class="item-info">
+        <div class="item-title">${item.name}</div>
+        <div class="item-subtitle">Nghệ sĩ</div>
+      </div>
+    </div>
+    `
+      )
+      .join("");
+    this.libraryContent.innerHTML = likeSongsHtml + htmlRecent;
+  }
+  async;
+  async checkBothClicked() {
+    if (this.isNearClicked && this.isHamburgerClicked) {
+      await this.renderRecent(); // Render giao diện "Gần đây"
+      // Reset trạng thái về false sau khi render
+      this.isNearClicked = false;
+      this.isHamburgerClicked = false;
+    }
   }
 }
 customElements.define("my-sidebar", sidebar);

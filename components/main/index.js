@@ -12,10 +12,16 @@ class MyHome extends HTMLElement {
     this.hitsGrid = this.shadowRoot.querySelector("#hits-grid");
     this.artistsGrid = this.shadowRoot.querySelector("#artists-grid");
   }
+  setLisstens() {
+    this.hitsGrid.querySelectorAll(".hit-card").forEach((item) => {
+      console.log(item);
+    });
+  }
   async render() {
     const data = await this.getHTMLString();
     this.shadowRoot.innerHTML = data;
     this.getElements();
+    this.setLisstens();
     this.renderPlaylists();
     this.renderArtists();
   }
@@ -32,7 +38,7 @@ class MyHome extends HTMLElement {
     const html = playlists
       .map(
         (item) => `
-        <div class="hit-card">
+        <div class="hit-card" data-id="${item.id}">
       <div class="hit-card-cover">
         <img src="${item.image_url}" alt="Flowers" />
         <button class="hit-play-btn">
@@ -48,6 +54,20 @@ class MyHome extends HTMLElement {
       )
       .join("");
     this.hitsGrid.innerHTML = html;
+
+    this.hitCard = this.hitsGrid.querySelectorAll(".hit-card");
+    this.hitCard.forEach((item) => {
+      item.addEventListener("click", () => {
+        const playlistsId = item.dataset.id;
+        document.dispatchEvent(
+          new CustomEvent("navigateToPlaylist", {
+            detail: { id: playlistsId, type: "playlist" },
+            bubbles: true,
+            composed: true,
+          })
+        );
+      });
+    });
   }
   async renderArtists() {
     const { artists, pagination } = await httpRequest.get(
@@ -56,7 +76,7 @@ class MyHome extends HTMLElement {
     const html = artists
       .map(
         (item) => `
-         <div class="artist-card">
+         <div class="artist-card" data-id="${item.id}">
       <div class="artist-card-cover">
         <img src="${item.image_url}" alt="${item.name}" />
         <button class="artist-play-btn">
@@ -73,6 +93,20 @@ class MyHome extends HTMLElement {
       .join("");
 
     this.artistsGrid.innerHTML = html;
+
+    this.artistCard = this.artistsGrid.querySelectorAll(".artist-card");
+    this.artistCard.forEach((item) => {
+      item.addEventListener("click", () => {
+        const artistsId = item.dataset.id;
+        document.dispatchEvent(
+          new CustomEvent("navigateToPlaylist", {
+            detail: { id: artistsId, type: "artist" },
+            bubbles: true,
+            composed: true,
+          })
+        );
+      });
+    });
   }
   open() {
     document.querySelector(".content-wrapper").prepend(this);

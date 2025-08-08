@@ -8,7 +8,8 @@ import "./components/toast/toast.js";
 
 // tạo 1 element là auth-modal
 const authModal = document.createElement("auth-modal");
-const myHome = document.createElement("my-home");
+const playList = document.createElement("play-list");
+const myHome = document.querySelector("my-home");
 // mở form đăng kí
 document.addEventListener("open:signupModal", () => {
   authModal.open("signup");
@@ -21,4 +22,18 @@ document.addEventListener("open:loginModal", () => {
 document.addEventListener("logout:success", () => {
   myHome.open();
   myHome.close();
+});
+
+document.addEventListener("navigateToPlaylist", (e) => {
+  const { id, type } = e.detail;
+
+  playList.setAttribute("data-id", id);
+  playList.setAttribute("data-type", type);
+
+  playList.open();
+  myHome.close();
+});
+document.addEventListener("navigateToMyHome", () => {
+  myHome.open();
+  playList.close();
 });

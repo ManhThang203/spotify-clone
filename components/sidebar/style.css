@@ -15,6 +15,9 @@
   flex-direction: column;
   gap: var(--spacing-md);
 }
+.logo {
+  cursor: pointer;
+}
 .logo i {
   font-size: 32px;
   color: var(--text-primary);
@@ -128,37 +131,6 @@
   box-sizing: border-box;
 }
 
-/* Chỉ áp dụng khi có class .grids-witcher */
-#library-content.grids-witcher {
-  display: flex;
-  flex-wrap: wrap;
-  flex-direction: row;
-}
-#library-content.grids-witcher .library-item {
-  display: block;
-  width: 30px;
-  flex: 0 0 calc(50% - 2px); /* 2 item mỗi hàng, trừ nửa gap */
-  box-sizing: border-box;
-}
-
-#library-content.grids-witcher .item-icon.liked-songs,
-#library-content.grids-witcher .item-image,
-#library-content.grid-view .item-icon.liked-songs,
-#library-content.grid-view .item-image {
-  margin: 0 auto;
-  width: 90px;
-  height: 90px;
-  border-radius: 50%;
-}
-#library-content.grids-witcher .item-icon.liked-songs,
-#library-content.grid-view .item-icon.liked-songs {
-  border-radius: 4px;
-}
-.library-content {
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-xs);
-}
 /* Library items */
 .library-item {
   display: flex;
