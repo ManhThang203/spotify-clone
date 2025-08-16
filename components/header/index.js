@@ -22,11 +22,52 @@ class MyHeader extends HTMLElement {
   }
 
   async render() {
-    const data = await this.getHTMLString();
-    this.shadowRoot.innerHTML = data;
+    // 1) Ẩn component tới khi sẵn sàng
+    this.style.visibility = "hidden";
+
+    // 2) Lấy nội dung HTML header
+    const html = await this.getHTMLString();
+
+    // 3) Parse để tách <link> ra trước
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(html, "text/html");
+    const linkEls = Array.from(doc.querySelectorAll('link[rel="stylesheet"]'));
+    linkEls.forEach((l) => l.remove()); // bỏ link ra khỏi markup; ta sẽ tự chèn link trước
+
+    // 4) Thêm các <link> vào ShadowRoot và CHỜ load xong
+    const waitLink = (href) =>
+      new Promise((resolve, reject) => {
+        const link = document.createElement("link");
+        link.rel = "stylesheet";
+        link.href = href; // dùng đúng href người viết trong file, không tự resolve
+        link.onload = resolve;
+        link.onerror = () => reject(new Error(`CSS failed: ${href}`));
+        this.shadowRoot.appendChild(link);
+      });
+
+    const hrefs = linkEls.map((l) => l.getAttribute("href")); // lấy nguyên xi
+    await Promise.all(hrefs.map(waitLink)); // chờ tất cả CSS sẵn sàng
+
+    // 5) Append phần markup còn lại (KHÔNG innerHTML để khỏi xoá <link>)
+    const tpl = document.createElement("template");
+    tpl.innerHTML = doc.body ? doc.body.innerHTML : html;
+    const frag = tpl.content.cloneNode(true);
+    this.shadowRoot.appendChild(frag);
+
+    // 6) (Tuỳ) chờ webfonts để tránh FOIT/FOUT biểu tượng
+    if (document.fonts && document.fonts.ready) {
+      try {
+        await document.fonts.ready;
+      } catch {}
+    }
+
+    // 7) Hook logic cũ
     this.setListeners();
-    this.hanndleSignUp();
-    this.hanndleLogOut();
+    await this.hanndleSignUp();
+    await this.hanndleLogOut();
+
+    // 8) Hiện component 1 lần duy nhất (CSS đã sẵn)
+    this.style.visibility = "visible";
   }
 
   async getHTMLString() {
@@ -72,7 +113,6 @@ class MyHeader extends HTMLElement {
     });
     this.userDropdown.addEventListener("click", (e) => {
       this.hanndleLogOut();
-      document.dispatchEvent(new CustomEvent("logout:success"));
     });
     this.btnHome.addEventListener("click", () => {
       document.dispatchEvent(new CustomEvent("navigateToMyHome"));
@@ -127,6 +167,15 @@ class MyHeader extends HTMLElement {
         this.userDropdown.remove();
       }
     } catch (error) {}
+  }
+  open() {
+    this.style.display = "block";
+
+    if (document.querySelector("my-header")) return;
+    document.querySelector(".main-content").prepend(this);
+  }
+  close() {
+    this.style.display = "none";
   }
 }
 

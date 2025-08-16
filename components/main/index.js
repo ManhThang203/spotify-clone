@@ -14,28 +14,62 @@ class MyHome extends HTMLElement {
   }
   setLisstens() {
     this.hitsGrid.querySelectorAll(".hit-card").forEach((item) => {
-      console.log(item);
+      // console.log(item);
     });
   }
   async render() {
-    const data = await this.getHTMLString();
-    this.shadowRoot.innerHTML = data;
+    this.style.visibility = "hidden";
+    const html = await this.getHTMLString();
+    // tạo đối tượng DOMParser để phân tích html
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(html, "text/html"); // biến đổi chuỗi html thành cây dom tree
+    const linkEls = Array.from(doc.querySelectorAll('link[rel="stylesheet"]'));
+    linkEls.forEach((l) => l.remove());
+    // lấy các hrel
+    // thêm các link vào shadowRoot và chờ load song
+    const awaitLink = (href) =>
+      new Promise((resolve, reject) => {
+        const link = document.createElement("link");
+        link.rel = "stylesheet";
+        link.href = href;
+        link.onload = resolve;
+        link.onerror = () => reject(new Error(`Css failed: ${href}`));
+        this.shadowRoot.appendChild(link);
+      });
+    const hrefs = linkEls.map((l) => l.getAttribute("href"));
+    await Promise.all(hrefs.map(awaitLink)); // chờ đợi tất cả css sẵn sàng
+
+    // appen phần marup còn lại (không innerHtml để xóa khỏi xóa link)
+    const tpl = document.createElement("template");
+    tpl.innerHTML = doc.body ? doc.body.innerHTML : html;
+    const frag = tpl.content.cloneNode(true);
+    this.shadowRoot.appendChild(frag);
+
+    // chờ webfonts để tránh FOIT/FOUt biểu tượng
+    // if (document.fonts && document.fonts.ready) {
+    //   try {
+    //     await document.fonts.ready;
+    //   } catch (error) {}
+    // }
+    // Hook logic
     this.getElements();
     this.setLisstens();
     this.renderPlaylists();
     this.renderArtists();
+    this.style.visibility = "visible";
   }
-
   async getHTMLString() {
     const res = await fetch("./components/main/main.html");
     const data = await res.text();
     return data;
   }
   async renderPlaylists() {
-    const { playlists, pagination } = await httpRequest.get(
-      "playlists?limit=20&offset=0"
-    );
-    const html = playlists
+    const [{ tracks }, { artists }] = await Promise.all([
+      httpRequest.get("tracks/trending?limit=20"),
+      httpRequest.get("artists?limit=20&offset=0"),
+    ]);
+    // console.log(artists);
+    const html = tracks
       .map(
         (item) => `
         <div class="hit-card" data-id="${item.id}">
@@ -46,8 +80,8 @@ class MyHome extends HTMLElement {
         </button>
       </div>
       <div class="hit-card-info">
-        <h3 class="hit-card-title">${item.name}</h3>
-        <p class="hit-card-artist">${item.user_display_name}</p>
+        <h3 class="hit-card-title">${item.title}</h3>
+        <p class="hit-card-artist">${item.artist_name}</p>
       </div>
     </div>
     `
@@ -58,10 +92,10 @@ class MyHome extends HTMLElement {
     this.hitCard = this.hitsGrid.querySelectorAll(".hit-card");
     this.hitCard.forEach((item) => {
       item.addEventListener("click", () => {
-        const playlistsId = item.dataset.id;
+        const artistsId = item.dataset.id;
         document.dispatchEvent(
           new CustomEvent("navigateToPlaylist", {
-            detail: { id: playlistsId, type: "playlist" },
+            detail: { id: artistsId, type: "artist" },
             bubbles: true,
             composed: true,
           })
@@ -109,10 +143,12 @@ class MyHome extends HTMLElement {
     });
   }
   open() {
+    this.style.display = "block";
+    if (document.querySelector("my-home")) return;
     document.querySelector(".content-wrapper").prepend(this);
   }
   close() {
-    this.remove(this);
+    this.style.display = "none";
   }
 }
 

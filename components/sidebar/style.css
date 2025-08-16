@@ -16,6 +16,7 @@
   gap: var(--spacing-md);
 }
 .logo {
+  display: inline;
   cursor: pointer;
 }
 .logo i {

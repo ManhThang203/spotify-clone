@@ -25,6 +25,7 @@ class sidebar extends HTMLElement {
     this.btnHamburger = this.shadowRoot.querySelector("#btn-hamburger");
     this.btnList = this.shadowRoot.querySelector("#btn-list");
     this.logo = this.shadowRoot.querySelector("#logo");
+    this.createBtn = this.shadowRoot.querySelector("#create-btn");
 
     this.sortBtn.addEventListener("click", (e) => {
       e.stopPropagation();
@@ -71,14 +72,65 @@ class sidebar extends HTMLElement {
     this.logo.addEventListener("click", () => {
       document.dispatchEvent(new CustomEvent("navigateToMyHome"));
     });
+
+    this.createBtn.addEventListener("click", async () => {
+      const token = localStorage.getItem("accessToken");
+      if (!token) {
+        document.dispatchEvent(new CustomEvent("open:loginModal"));
+        return;
+      } else {
+        try {
+          // const name = "My Playlist";
+          // const description = "Playlist mới";
+          // const is_public = true;
+          // const image_url =
+          //   "https://spotify.f8team.dev/uploads/images/img_69e7dbe0-053b-4b32-9595-bae641c54065.jpg";
+          // const { playlist } = await httpRequest.post("playlists", {
+          //   name,
+          //   description,
+          //   is_public,
+          //   image_url,
+          // });
+          document.dispatchEvent(new CustomEvent("open:playlistheader"));
+        } catch (error) {}
+      }
+    });
   }
 
   async render() {
-    const data = await this.getHTMLString();
-    this.shadowRoot.innerHTML = data;
+    this.style.visibility = "hidden";
+    const html = await this.getHTMLString();
+
+    // tạo 1 đối tượng DOMParser để phần tích html
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(html, "text/html"); // biển đổi chuỗi html thành cây dom tree
+    const linkEls = Array.from(doc.querySelectorAll('link[rel="stylesheet"]'));
+    linkEls.forEach((l) => l.remove());
+
+    // thêm các link vào shadowRoot vf chờ load
+    const awaitLink = (href) => {
+      return new Promise((resolve, reject) => {
+        const link = document.createElement("link");
+        link.rel = "stylesheet";
+        link.href = href;
+        link.onload = resolve;
+        link.onerror = () => reject(new Error(`Css faile ${href}`));
+        this.shadowRoot.appendChild(link);
+      });
+    };
+    const hrefs = linkEls.map((l) => l.getAttribute("href"));
+    await Promise.all(hrefs.map(awaitLink)); // chờ đợi tất cả css sẵn sàng
+    // appen phần marup còn lại
+    const tpl = document.createElement("template");
+    tpl.innerHTML = doc.body ? doc.body.innerHTML : html;
+    const frag = tpl.content.cloneNode(true);
+    this.shadowRoot.appendChild(frag);
+
     this.setListeners();
     this.renderList();
     // this.renderRecent();
+
+    this.style.visibility = "visible";
   }
   async getHTMLString() {
     const res = await fetch("./components/sidebar/sidebar.html");
@@ -152,7 +204,6 @@ class sidebar extends HTMLElement {
       .join("");
     this.libraryContent.innerHTML = likeSongsHtml + htmlRecent;
   }
-  async;
   async checkBothClicked() {
     if (this.isNearClicked && this.isHamburgerClicked) {
       await this.renderRecent(); // Render giao diện "Gần đây"

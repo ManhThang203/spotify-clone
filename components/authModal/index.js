@@ -51,7 +51,8 @@ class AuthModal extends HTMLElement {
       }
     });
     this.signupPassword.addEventListener("input", () => {
-      const isPassword = this.signupPassword.value.length > 6;
+      const isPassword = this.signupPassword.value.length >= 6;
+      console.log(isPassword);
       if (isPassword) {
         this.signupPassword.closest(".form-group").classList.remove("invalid");
       } else {
@@ -69,7 +70,7 @@ class AuthModal extends HTMLElement {
       }
     });
     this.loginPassword.addEventListener("input", () => {
-      const isPassword = this.loginPassword.value.length > 6;
+      const isPassword = this.loginPassword.value.length >= 6;
       if (isPassword) {
         this.loginPassword.closest(".form-group").classList.remove("invalid");
       } else {

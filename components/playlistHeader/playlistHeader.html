@@ -1,0 +1,78 @@
+<link rel="stylesheet" href="./assets/css/reset.css" />
+<link rel="stylesheet" href="./assets/css/variables.css" />
+<link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+/>
+<link rel="stylesheet" href="./components/playlistHeader/playlistHeader.css" />
+
+<header class="playlist-header">
+  <div class="cover" id="cover">
+    <i class="fa-solid fa-music"></i>
+    <div class="cover-choose" id="cover-choose">
+      <i class="fa-solid fa-pen"></i>
+      <p class="choose-title">choose photo</p>
+    </div>
+  </div>
+  <div class="info" id="info">
+    <p class="playlist-type">Public Playlist</p>
+    <h1 class="playlist-title" id="playlist-title"></h1>
+    <p class="playlist-author" id="playlist-author"></p>
+  </div>
+</header>
+<div class="model" id="modal">
+  <div class="modal-content" id="modal-content">
+    <header class="modal-header">
+      <h2 class="header-title">Edit details</h2>
+      <i class="fa-solid fa-xmark close-modal" id="close-modal"></i>
+    </header>
+    <main class="modal-wrapper">
+      <input type="file" id="main-cover-input" accept="image/*" hidden />
+      <label class="main-cover" id="main-cover" for="main-cover-input">
+        <i class="fa-solid fa-music"></i>
+
+        <div class="modal-choose" id="modal-choose">
+          <i class="fa-solid fa-pen"></i>
+          <p class="choose-title">choose photo</p>
+        </div>
+      </label>
+      <div class="main-title">
+        <div class="input-wrap">
+          <input type="text" id="name" />
+          <label for="name" class="input-title">Name</label>
+        </div>
+        <div class="textarea-wrap">
+          <textarea
+            id="Description"
+            placeholder="Add an optional description"
+          ></textarea>
+          <label for="Description" class="textarea-title">Description</label>
+        </div>
+      </div>
+    </main>
+    <button class="btn-save">Save</button>
+    <footer class="footer-content">
+      By proceeding, you agree to give Spotify access to the image you choose to
+      upload. Please make sure you have the right to upload the image.
+    </footer>
+  </div>
+</div>
+<nav class="playlist-actions">
+  <button class="action-btn">
+    <i class="fa-solid fa-user user-plus"></i>
+  </button>
+  <button class="action-btn"><i class="fa-solid fa-ellipsis"></i></button>
+  <div class="compact-toggle">
+    <span>Compact</span>
+    <i class="fa-solid fa-bars"></i>
+  </div>
+</nav>
+
+<section class="playlist-search">
+  <p>Let's find something for your playlist</p>
+  <div class="search-box">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <input type="text" placeholder="Search for songs or episodes" />
+    <i class="fa-solid fa-xmark"></i>
+  </div>
+</section>
