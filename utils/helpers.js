@@ -12,3 +12,16 @@ export function formatTime(sec) {
   }
   return `${m}:${s}`;
 }
+
+export function attachTooltip(root, btnSelector, tooltipSelector) {
+  const btn = root.querySelector(btnSelector);
+  const tooltip = root.querySelector(tooltipSelector);
+  if (btn && tooltip) {
+    btn.addEventListener("mouseenter", () => {
+      tooltip.classList.add("active");
+    });
+    btn.addEventListener("mouseleave", () => {
+      tooltip.classList.remove("active");
+    });
+  }
+}

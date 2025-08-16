@@ -45,12 +45,6 @@ class MyHome extends HTMLElement {
     const frag = tpl.content.cloneNode(true);
     this.shadowRoot.appendChild(frag);
 
-    // chờ webfonts để tránh FOIT/FOUt biểu tượng
-    // if (document.fonts && document.fonts.ready) {
-    //   try {
-    //     await document.fonts.ready;
-    //   } catch (error) {}
-    // }
     // Hook logic
     this.getElements();
     this.setLisstens();
@@ -68,7 +62,6 @@ class MyHome extends HTMLElement {
       httpRequest.get("tracks/trending?limit=20"),
       httpRequest.get("artists?limit=20&offset=0"),
     ]);
-    // console.log(artists);
     const html = tracks
       .map(
         (item) => `

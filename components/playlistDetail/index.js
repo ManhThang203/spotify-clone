@@ -10,10 +10,17 @@ class Playlist extends HTMLElement {
   connectedCallback() {
     this.render();
   }
+  setListner() {
+    document.addEventListener("curren-song", (e) => {
+      const { currentIndex } = e.detail;
+      this.currentIndex = currentIndex;
+      console.log(this.currentIndex);
+      this.renderTrack(this.id);
+    });
+  }
   getElement() {
     // this.contentWrapper = this.shadowRoot.querySelector("")
     this.id = this.getAttribute("data-id");
-    console.log(this.id);
     this.type = this.getAttribute("data-type");
     this.trackList = this.shadowRoot.querySelector("#track-list");
     this.artistHero = this.shadowRoot.querySelector("#artist-hero");
@@ -51,6 +58,7 @@ class Playlist extends HTMLElement {
     const frag = tpl.content.cloneNode(true);
     this.shadowRoot.appendChild(frag);
 
+    this.setListner();
     this.getElement();
     this.renderPlaylist(this.id, this.type);
     this.renderTrack(this.id);
@@ -87,14 +95,24 @@ class Playlist extends HTMLElement {
   }
   async renderTrack(id) {
     const data = await httpRequest.get("tracks/trending?limit=20");
-    const { tracks, pagination } = data;
+    const { tracks } = data;
     const artistTracks = tracks.filter((item) => item.artist_id === id);
+
     const html = artistTracks
       .map((item, index) => {
         const duration = formatTime(item.duration);
+        const isPlaying = index === this.currentIndex;
+        console.log(isPlaying);
         return `
-          <div class="track-item">
-          <div class="track-number">${index + 1}</div>
+        <div class="track-item ${isPlaying ? "playing" : ""}" >
+         <div class="track-number" style="display: ${
+           isPlaying ? "block" : "none"
+         };">
+          <i class="fas fa-volume-up playing-icon"></i>
+         </div>
+          <div class="track-number"  style="display: ${
+            isPlaying ? "none" : "block"
+          };">${index + 1}</div>
           <div class="track-image">
             <img src="${item.image_url}" alt="${item.title}" />
           </div>
@@ -110,8 +128,23 @@ class Playlist extends HTMLElement {
     `;
       })
       .join("");
+
     this.trackList.innerHTML = html;
+    // lấy ra tất cả các trackItem
+    this.trackItems = Array.from(
+      this.shadowRoot.querySelectorAll(".track-item")
+    );
+    this.trackItems.forEach((item) => {
+      item.addEventListener("click", () => {
+        document.dispatchEvent(
+          new CustomEvent("song-artist", {
+            detail: { song: artistTracks },
+          })
+        );
+      });
+    });
   }
+
   open() {
     this.style.display = "block";
     document.querySelector(".content-wrapper").appendChild(this);

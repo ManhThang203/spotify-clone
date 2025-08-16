@@ -64,7 +64,6 @@ class MyHeader extends HTMLElement {
     // 7) Hook logic cũ
     this.setListeners();
     await this.hanndleSignUp();
-    await this.hanndleLogOut();
 
     // 8) Hiện component 1 lần duy nhất (CSS đã sẵn)
     this.style.visibility = "visible";
@@ -159,6 +158,7 @@ class MyHeader extends HTMLElement {
   async hanndleLogOut() {
     try {
       const { message } = await httpRequest.post("auth/logout");
+      console.log(message);
       if (message) {
         localStorage.removeItem("accessToken");
         this.authButtons.classList.add("show");
@@ -166,6 +166,7 @@ class MyHeader extends HTMLElement {
         this.userName.remove();
         this.userDropdown.remove();
       }
+      document.dispatchEvent(new CustomEvent("logout:success"));
     } catch (error) {}
   }
   open() {

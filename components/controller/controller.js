@@ -1,9 +1,77 @@
+import { attachTooltip } from "../../utils/helpers.js";
 class Controller extends HTMLElement {
+  isSongPlaying = true;
   constructor() {
     super();
     this.attachShadow({ mode: "open" });
   }
+  setListner() {
+    document.addEventListener("logout:success", () => {
+      this.playerLeft.style.visibility = "hidden";
+    });
+    document.addEventListener("login:success", () => {
+      this.playerLeft.style.visibility = "visible";
+    });
+    document.addEventListener("signUp:success", () => {
+      this.playerLeft.style.visibility = "visible";
+    });
+    // lắng nghe bài hát của nghệ sĩ đó
+    document.addEventListener("song-artist", (e) => {
+      this.playerLeft.style.visibility = "visible";
 
+      const { song } = e.detail;
+      this.songs = song;
+      this.currentIndex = 0;
+      this.togglePlayBtn.addEventListener("click", () => {
+        this._togglePlay();
+
+        this.audio.onplay = () => {
+          this.playIcon.classList.add("fa-pause");
+          this.playIcon.classList.remove("fa-play");
+        };
+        this.audio.onpause = () => {
+          this.playIcon.classList.remove("fa-pause");
+          this.playIcon.classList.add("fa-play");
+        };
+      });
+      this._loadCurrenSong();
+    });
+  }
+  _getCurrentSong() {
+    return this.songs[this.currentIndex];
+  }
+  _loadCurrenSong() {
+    const currentSong = this._getCurrentSong();
+    this.playerImage.src = currentSong.image_url;
+    this.playerTitle.textContent = currentSong.title;
+    this.playerArtist.textContent = currentSong.artist_name;
+    this.audio.src = currentSong.audio_url;
+    document.dispatchEvent(
+      new CustomEvent("curren-song", {
+        detail: { currentIndex: this.currentIndex },
+      })
+    );
+
+    if (currentSong) return;
+  }
+  _togglePlay() {
+    if (this.audio.paused) {
+      this.audio.play();
+    } else {
+      this.audio.pause();
+    }
+  }
+
+  getElement() {
+    this.togglePlayBtn = this.shadowRoot.querySelector("#play-btn");
+    this.playerLeft = this.shadowRoot.querySelector("#player-left");
+    this.playerImage = this.shadowRoot.querySelector("#player-image");
+    this.playerTitle = this.shadowRoot.querySelector("#player-title");
+    this.playerArtist = this.shadowRoot.querySelector("#player-artist");
+    this.audio = this.shadowRoot.querySelector("#audio");
+    this.playIcon = this.shadowRoot.querySelector("#play-icon");
+    this.playerLeft.style.visibility = "hidden";
+  }
   connectedCallback() {
     this.render();
   }
@@ -35,10 +103,13 @@ class Controller extends HTMLElement {
     const frag = tpl.content.cloneNode(true);
     this.shadowRoot.appendChild(frag);
 
+    // các Hook
     this.initTooltip(); // Gọi sau khi HTML được gán
+    this.setListner();
+    this.getElement();
+
     this.style.visibility = "visible";
   }
-
   async getHTMLString() {
     const res = await fetch("./components/controller/controller.html");
     const data = await res.text();
@@ -47,28 +118,15 @@ class Controller extends HTMLElement {
 
   // Gắn tooltip cho các nút trong shadowRoot
   initTooltip() {
-    const attachTooltip = (btnSelector, tooltipSelector) => {
-      const btn = this.shadowRoot.querySelector(btnSelector);
-      const tooltip = this.shadowRoot.querySelector(tooltipSelector);
-      if (btn && tooltip) {
-        btn.addEventListener("mouseenter", () => {
-          tooltip.classList.add("active");
-        });
-        btn.addEventListener("mouseleave", () => {
-          tooltip.classList.remove("active");
-        });
-      }
-    };
-
-    attachTooltip(".btn-Shuffle", ".tooltip-Shuffle");
-    attachTooltip(".btn-prev", ".tooltip-prev");
-    attachTooltip(".play-btn", ".tooltip-play");
-    attachTooltip(".btn-next", ".tooltip-next");
-    attachTooltip(".btn-loop", ".tooltip-loop");
-    attachTooltip(".btn-voice", ".tooltip-voice");
-    attachTooltip(".btn-noice", ".tooltip-noice");
-    attachTooltip(".btn-screen", ".tooltip-screen");
-    attachTooltip(".add-btn", ".tooltip-add");
+    attachTooltip(this.shadowRoot, ".btn-Shuffle", ".tooltip-Shuffle");
+    attachTooltip(this.shadowRoot, ".btn-prev", ".tooltip-prev");
+    attachTooltip(this.shadowRoot, ".play-btn", ".tooltip-play");
+    attachTooltip(this.shadowRoot, ".btn-next", ".tooltip-next");
+    attachTooltip(this.shadowRoot, ".btn-loop", ".tooltip-loop");
+    attachTooltip(this.shadowRoot, ".btn-voice", ".tooltip-voice");
+    attachTooltip(this.shadowRoot, ".btn-noice", ".tooltip-noice");
+    attachTooltip(this.shadowRoot, ".btn-screen", ".tooltip-screen");
+    attachTooltip(this.shadowRoot, ".add-btn", ".tooltip-add");
   }
 }
 
