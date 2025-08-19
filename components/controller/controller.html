@@ -27,11 +27,11 @@
 
 <div class="player-center">
   <div class="player-controls">
-    <button class="control-btn active btn-Shuffle">
+    <button class="control-btn btn-Shuffle" id="btn-random">
       <i class="fas fa-random"></i>
       <p class="tooltip-Shuffle tooltip-base">Bật tính năng trộn bài</p>
     </button>
-    <button class="control-btn btn-prev">
+    <button class="control-btn btn-prev" id="btn-prev">
       <i class="fas fa-step-backward"></i>
       <p class="tooltip-prev tooltip-base">Trước</p>
     </button>
@@ -40,22 +40,22 @@
       <!-- <i class="fa-solid fa-pause" id="play-icon"></i> -->
       <p class="tooltip-play tooltip-base">Tạm dừng</p>
     </button>
-    <button class="control-btn btn-next">
+    <button class="control-btn btn-next" id="btn-next">
       <i class="fas fa-step-forward"></i>
       <p class="tooltip-next tooltip-base">Tiếp</p>
     </button>
-    <button class="control-btn btn-loop">
+    <button class="control-btn btn-loop" id="btn-loop">
       <i class="fas fa-redo"></i>
       <p class="tooltip-loop tooltip-base">Kích hoạt chế độ lặp lại</p>
     </button>
   </div>
   <div class="progress-container">
-    <span class="time">0:52</span>
-    <div class="progress-bar">
-      <div class="progress-fill" style="width: 20%"></div>
-      <div class="progress-handle"></div>
+    <span class="time" id="current-time">0:00</span>
+    <div class="progress-bar" id="progress-bar">
+      <div class="progress-fill" id="progress-fill" style="width: 0%"></div>
+      <div class="progress-handle" id="progress-handle" style="left: 0px"></div>
     </div>
-    <span class="time">4:59</span>
+    <span class="time" id="duration-time">0:00</span>
   </div>
 </div>
 

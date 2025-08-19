@@ -88,6 +88,7 @@
   margin-bottom: var(--spacing-md);
 }
 .search-library-btn {
+  position: relative;
   width: 32px;
   height: 32px;
   border-radius: var(--radius-full);
@@ -97,11 +98,16 @@
   align-items: center;
   justify-content: center;
   transition: all var(--transition-fast);
+  z-index: var(--z-sidebar);
 }
 .search-library-btn:hover {
   background-color: var(--bg-tertiary);
   color: var(--text-primary);
   transform: scale(1.04);
+}
+.input-search {
+  display: none;
+  position: absolute;
 }
 .sort-btn {
   padding: var(--spacing-xs) var(--spacing-sm);

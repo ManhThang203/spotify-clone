@@ -1,6 +1,9 @@
 import httpRequest from "../../utils/httpRequest.js";
 import { formatTime } from "../../utils/helpers.js";
 class Playlist extends HTMLElement {
+  playingSong;
+  isPaused;
+  isPlaySong;
   constructor() {
     super();
     // tạo 1 cây Dom riêng biệt
@@ -12,10 +15,25 @@ class Playlist extends HTMLElement {
   }
   setListner() {
     document.addEventListener("curren-song", (e) => {
-      const { currentIndex } = e.detail;
+      const { currentIndex, song } = e.detail;
       this.currentIndex = currentIndex;
-      console.log(this.currentIndex);
+      this.playingSong = song; // update lại bài hát mới mới
+      // gọi lại để  this.currentIndex
       this.renderTrack(this.id);
+    });
+    document.addEventListener("toggle-play", (e) => {
+      const { isPause } = e.detail;
+      this.isPaused = isPause;
+      // gọi lại để  this.currentIndex
+      this.renderTrack(this.id);
+    });
+    this.btnFollow.addEventListener("click", () => {
+      this.btnFollow.classList.add("hidden");
+      this.btnAreFollow.classList.add("active");
+    });
+    this.btnAreFollow.addEventListener("click", () => {
+      this.btnFollow.classList.remove("hidden");
+      this.btnAreFollow.classList.remove("active");
     });
   }
   getElement() {
@@ -24,6 +42,9 @@ class Playlist extends HTMLElement {
     this.type = this.getAttribute("data-type");
     this.trackList = this.shadowRoot.querySelector("#track-list");
     this.artistHero = this.shadowRoot.querySelector("#artist-hero");
+    this.playBtnLarge = this.shadowRoot.querySelector("#play-btn-large");
+    this.btnFollow = this.shadowRoot.querySelector("#btn-follow");
+    this.btnAreFollow = this.shadowRoot.querySelector("#btn-arefollow");
   }
   async render() {
     // 1) Ẩn component tới khi sẵn sàng
@@ -58,8 +79,8 @@ class Playlist extends HTMLElement {
     const frag = tpl.content.cloneNode(true);
     this.shadowRoot.appendChild(frag);
 
-    this.setListner();
     this.getElement();
+    this.setListner();
     this.renderPlaylist(this.id, this.type);
     this.renderTrack(this.id);
     // gọi 1 lần duy  nhất
@@ -101,10 +122,17 @@ class Playlist extends HTMLElement {
     const html = artistTracks
       .map((item, index) => {
         const duration = formatTime(item.duration);
-        const isPlaying = index === this.currentIndex;
-        console.log(isPlaying);
+        // Nếu bài bài hát hiện tại bằng bài hát đang phát
+        // Bài hát hiện tại đang phát
+        // Nếu đang phát
+        const isPlaying =
+          index === this.currentIndex &&
+          this.playingSong.id === item.id &&
+          !this.isPaused;
         return `
-        <div class="track-item ${isPlaying ? "playing" : ""}" >
+        <div class="track-item ${isPlaying ? "playing" : ""}" data-id="${
+          item.id
+        }">
          <div class="track-number" style="display: ${
            isPlaying ? "block" : "none"
          };">
@@ -136,11 +164,22 @@ class Playlist extends HTMLElement {
     );
     this.trackItems.forEach((item) => {
       item.addEventListener("click", () => {
+        const local = localStorage.getItem("access_token");
+        // if (!local) {
+        //   document.dispatchEvent(new CustomEvent("open:loginModal"));
+        //   return;
+        // }
+        const playingSong = artistTracks.find((i) => i.id == item.dataset.id);
+
         document.dispatchEvent(
           new CustomEvent("song-artist", {
-            detail: { song: artistTracks },
+            detail: {
+              song: playingSong,
+              songs: artistTracks,
+            },
           })
         );
+        this.playingSong = playingSong;
       });
     });
   }

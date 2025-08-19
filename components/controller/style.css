@@ -241,6 +241,9 @@
 .volume-bar:hover {
   height: 6px;
 }
+.progress-bar:hover .progress-fill {
+  background-color: var(--accent-hover);
+}
 
 .progress-bar:hover .progress-handle,
 .volume-bar:hover .volume-handle {

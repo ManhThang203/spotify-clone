@@ -191,6 +191,34 @@
   color: var(--accent-primary);
   font-size: 14px;
 }
+.btn-follow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  border: 1px solid #ccc;
+  border-radius: 999px;
+  color: #fff;
+  transition: all 0.3s ease;
+}
+.btn-follow:hover {
+  border-color: #fff;
+  transform: scale(1.05);
+}
+.follow {
+  display: block;
+}
+.follow.hidden {
+  display: none;
+}
+.are-follow {
+  display: none;
+}
+.are-follow.active {
+  display: block;
+}
 
 /* Large Desktop */
 @media (min-width: 1200px) {
@@ -261,6 +289,7 @@
   .play-btn-large i {
     font-size: 20px;
   }
+
   .section-title {
     font-size: 20px;
   }
