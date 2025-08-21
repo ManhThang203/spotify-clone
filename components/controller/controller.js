@@ -116,6 +116,11 @@ class Controller extends HTMLElement {
     // Di chuyển khi kéo
     document.addEventListener("mousemove", (e) => {
       if (!isDragging) return;
+      // if (this.audio.paused) {
+      //   this.audio.pause();
+      // } else {
+      //   this.audio.play();
+      // }
 
       const rect = this.progressBar.getBoundingClientRect();
       dragPercent = (e.clientX - rect.left) / rect.width;

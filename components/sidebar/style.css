@@ -98,16 +98,20 @@
   align-items: center;
   justify-content: center;
   transition: all var(--transition-fast);
-  z-index: var(--z-sidebar);
+  z-index: 999;
 }
 .search-library-btn:hover {
   background-color: var(--bg-tertiary);
   color: var(--text-primary);
   transform: scale(1.04);
+  z-index: 999;
 }
 .input-search {
-  display: none;
   position: absolute;
+  top: 50%;
+  transform: translateX(-50%);
+  right: 0;
+  z-index: -1;
 }
 .sort-btn {
   padding: var(--spacing-xs) var(--spacing-sm);

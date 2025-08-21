@@ -115,7 +115,7 @@ class Playlist extends HTMLElement {
     } catch (error) {}
   }
   async renderTrack(id) {
-    const data = await httpRequest.get("tracks/trending?limit=20");
+    const data = await httpRequest.get("tracks?limit=50&offset=0");
     const { tracks } = data;
     const artistTracks = tracks.filter((item) => item.artist_id === id);
 
