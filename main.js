@@ -1,7 +1,7 @@
-import "./components/header/index.js";
-import "./components/authModal/index.js";
-import "./components/main/index.js";
-import "./components/playlistDetail/index.js";
+import "./components/authModal/authModal.js";
+import "./components/header/header.js";
+import "./components/main/main.js";
+import "./components/playlistDetail/playlistDetail.js";
 import "./components/sidebar/sidebar.js";
 import "./components/controller/controller.js";
 import "./components/toast/toast.js";
