@@ -67,20 +67,27 @@ class Playlist extends HTMLElement {
   }
 
   getLocal() {
-    // lấy trạng thái bài hát
-    // chuyển string thành boolean
-    // Nếu không có dữ liệu là false
-    this.isPlaying = JSON.parse(localStorage.getItem("isPlaying")) || false;
-    // lấy thông tin bài hát
-    // chuyển Json thành object
-    // Nếu không có dữ liệu là null
+    this.isPlaying =
+      JSON.parse(
+        localStorage.getItem("isPlaying") === "undefined" ||
+          localStorage.getItem("isPlaying") === undefined
+          ? null
+          : localStorage.getItem("isPlaying")
+      ) || false;
     this.playingTrack =
-      JSON.parse(localStorage.getItem("playingTrack")) || null;
-    // Lấy sách bài hát hiện tại
-    // chuyển string JSON thành array
-    // Nếu ko có dữ liệu thì là array rỗng
+      JSON.parse(
+        localStorage.getItem("playingTrack") === "undefined" ||
+          localStorage.getItem("playingTrack") === undefined
+          ? null
+          : localStorage.getItem("playingTrack")
+      ) || null;
     this.playingTracks =
-      JSON.parse(localStorage.getItem("playingTracks")) || [];
+      JSON.parse(
+        localStorage.getItem("playingTracks") === "undefined" ||
+          localStorage.getItem("playingTracks") === undefined
+          ? null
+          : localStorage.getItem("playingTracks")
+      ) || [];
   }
   // kiểm tra bài hát đang hát có phải là bài hát hiện tại hay không
   isSame() {
@@ -98,12 +105,17 @@ class Playlist extends HTMLElement {
   async getData() {
     this.getLocal();
     this.artistId = this.dataset.id;
+    this.artistSongId = this.dataset.id;
+    console.log(this.artistSongId);
     this.type = this.dataset.type;
     const { tracks } = await httpRequest.get("tracks?limit=50&offset=0");
     this.artistTracks = tracks.filter(
       (item) => item.artist_id === this.artistId
     );
     this.artist = await httpRequest.get(`artists/${this.artistId}`);
+    this.artistSong = await httpRequest.get(`tracks/${this.artistSongId}`);
+    console.log(this.artistSong);
+
     this.isSame(); // cập nhật lại luôn khi chyển tới nghệ sĩ khác
   }
 

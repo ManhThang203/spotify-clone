@@ -103,15 +103,53 @@
 .search-library-btn:hover {
   background-color: var(--bg-tertiary);
   color: var(--text-primary);
-  transform: scale(1.04);
-  z-index: 999;
+  /* transform: scale(1.04); */
 }
 .input-search {
+  display: none;
   position: absolute;
   top: 50%;
-  transform: translateX(-50%);
-  right: 0;
+  left: 319%;
+  padding: 8px 8px 8px 40px;
+  border-radius: 5px;
+  background-color: var(--bg-active);
+  transform: translate(-50%, -50%);
   z-index: -1;
+  width: 220px;
+  color: var(--text-secondary);
+  font-weight: 500;
+  transition: all 0.5s ease;
+}
+
+.input-search.show {
+  animation: searchIn 0.5s forwards;
+  display: block;
+}
+
+.input-search.hide {
+  animation: searchOut 0.5s forwards;
+}
+
+@keyframes searchIn {
+  from {
+    transform: translate(-50%, -50%);
+    left: 300%;
+  }
+  to {
+    transform: translate(-50%, -50%);
+    left: 319%;
+  }
+}
+
+@keyframes searchOut {
+  from {
+    transform: translate(-50%, -50%);
+    left: 319%;
+  }
+  to {
+    transform: translate(-50%, -50%);
+    left: 0%;
+  }
 }
 .sort-btn {
   padding: var(--spacing-xs) var(--spacing-sm);

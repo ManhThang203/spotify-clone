@@ -26,15 +26,28 @@ class sidebar extends HTMLElement {
     this.btnList = this.shadowRoot.querySelector("#btn-list");
     this.logo = this.shadowRoot.querySelector("#logo");
     this.createBtn = this.shadowRoot.querySelector("#create-btn");
+    this.btnSearch = this.shadowRoot.querySelector("#btn-search");
+    this.inputSearch = this.shadowRoot.querySelector("#input-search");
+    this.playlists = this.shadowRoot.querySelector("#Playlists");
+    this.artists = this.shadowRoot.querySelector("#Artists");
+    this.navTab = Array.from(this.shadowRoot.querySelectorAll(".nav-tab"));
+    this.sortModal = this.shadowRoot.querySelector("#sort-modal");
 
     this.sortBtn.addEventListener("click", (e) => {
       e.stopPropagation();
       this.toggleMenuSort();
+      this.inputSearch.classList.remove("show");
     });
     document.addEventListener("click", (e) => {
       const isSortForm = e.composedPath().includes(this.sortForm);
       if (!isSortForm) {
         this.sortForm.classList.remove("show");
+      }
+      if (
+        !e.target.closest(".fa-search") &&
+        !e.target.closest(".input-search")
+      ) {
+        this.inputSearch.classList.remove("show");
       }
     });
     document.addEventListener("keydown", (e) => {
@@ -94,6 +107,21 @@ class sidebar extends HTMLElement {
           document.dispatchEvent(new CustomEvent("open:playlistheader"));
         } catch (error) {}
       }
+    });
+    this.btnSearch.addEventListener("click", (e) => {
+      e.stopPropagation();
+      if (e.target.closest(".fa-search")) {
+        this.inputSearch.classList.toggle("show");
+        this.btnSearch.classList.add(".no-hover");
+        this.inputSearch.focus();
+        this.sortForm.classList.remove("show");
+      }
+    });
+    this.navTab.forEach((item) => {
+      item.addEventListener("click", () => {
+        this.navTab.forEach((item) => item.classList.remove("active"));
+        item.classList.add("active");
+      });
     });
   }
 

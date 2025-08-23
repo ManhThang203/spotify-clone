@@ -60,11 +60,27 @@ class Controller extends HTMLElement {
   }
 
   getLocal() {
-    this.isPlaying = JSON.parse(localStorage.getItem("isPlaying")) || false;
+    this.isPlaying =
+      JSON.parse(
+        localStorage.getItem("isPlaying") === "undefined" ||
+          localStorage.getItem("isPlaying") === undefined
+          ? null
+          : localStorage.getItem("isPlaying")
+      ) || false;
     this.playingTrack =
-      JSON.parse(localStorage.getItem("playingTrack")) || null;
+      JSON.parse(
+        localStorage.getItem("playingTrack") === "undefined" ||
+          localStorage.getItem("playingTrack") === undefined
+          ? null
+          : localStorage.getItem("playingTrack")
+      ) || null;
     this.playingTracks =
-      JSON.parse(localStorage.getItem("playingTracks")) || [];
+      JSON.parse(
+        localStorage.getItem("playingTracks") === "undefined" ||
+          localStorage.getItem("playingTracks") === undefined
+          ? null
+          : localStorage.getItem("playingTracks")
+      ) || [];
   }
 
   getData() {
