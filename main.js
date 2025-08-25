@@ -7,6 +7,8 @@ import "./components/controller/controller.js";
 import "./components/toast/toast.js";
 import "./components/playlistHeader/playlistHeader.js";
 
+localStorage.setItem("isPlaying", false);
+
 // tạo 1 element là auth-modal
 const authModal = document.createElement("auth-modal");
 const playList = document.createElement("play-list");
@@ -25,7 +27,11 @@ document.addEventListener("open:loginModal", () => {
 document.addEventListener("navigateToPlaylist", (e) => {
   const { id, type } = e.detail;
 
-  playList.setAttribute("data-id", id);
+  if (type === "track") {
+    playList.setAttribute("data-track", id);
+  } else if (type === "artist") {
+    playList.setAttribute("data-artist", id);
+  }
   playList.setAttribute("data-type", type);
 
   playList.open();

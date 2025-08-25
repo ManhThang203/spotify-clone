@@ -65,7 +65,7 @@ class MyHome extends HTMLElement {
     const html = tracks
       .map(
         (item) => `
-        <div class="hit-card" data-id="${item.id}">
+        <div class="hit-card" data-track="${item.id}">
       <div class="hit-card-cover">
         <img src="${item.image_url}" alt="Flowers" />
         <button class="hit-play-btn">
@@ -85,10 +85,10 @@ class MyHome extends HTMLElement {
     this.hitCard = this.hitsGrid.querySelectorAll(".hit-card");
     this.hitCard.forEach((item) => {
       item.addEventListener("click", () => {
-        const artistsId = item.dataset.id;
+        const trackId = item.dataset.track;
         document.dispatchEvent(
-          new CustomEvent("navigateToPlaylist", {
-            detail: { id: artistsId, type: "artist" },
+          new CustomEvent("navigateTotracksArtist", {
+            detail: { id: trackId, type: "track" },
             bubbles: true,
             composed: true,
           })
@@ -103,7 +103,7 @@ class MyHome extends HTMLElement {
     const html = artists
       .map(
         (item) => `
-         <div class="artist-card" data-id="${item.id}">
+         <div class="artist-card" data-artist="${item.id}">
       <div class="artist-card-cover">
         <img src="${item.image_url}" alt="${item.name}" />
         <button class="artist-play-btn">
@@ -124,7 +124,7 @@ class MyHome extends HTMLElement {
     this.artistCard = this.artistsGrid.querySelectorAll(".artist-card");
     this.artistCard.forEach((item) => {
       item.addEventListener("click", () => {
-        const artistsId = item.dataset.id;
+        const artistsId = item.dataset.artist;
         document.dispatchEvent(
           new CustomEvent("navigateToPlaylist", {
             detail: { id: artistsId, type: "artist" },

@@ -65,13 +65,15 @@
     <p class="tooltip-voice tooltip-base">Lời bài hát</p>
   </button>
   <div class="volume-container">
-    <button class="control-btn btn-noice">
-      <i class="fas fa-volume-down"></i>
+    <button class="control-btn btn-noice" id="btn-noice">
+      <!-- <i class="fas fa-volume-down"></i> -->
+      <!-- <i class="fa-solid fa-volume-xmark"></i> -->
+      <i class="fa-solid fa-volume-high"></i>
       <p class="tooltip-noice tooltip-base">Tắt tiếng</p>
     </button>
-    <div class="volume-bar">
-      <div class="volume-fill" style="width: 70%"></div>
-      <div class="volume-handle"></div>
+    <div class="volume-bar" id="volume-bar">
+      <div class="volume-fill" id="volume-fill" style="width: 100%"></div>
+      <div class="volume-handle" id="volume-handle" style="left: 95%"></div>
     </div>
   </div>
   <button class="control-btn btn-screen">

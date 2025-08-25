@@ -10,6 +10,7 @@ class Controller extends HTMLElement {
   isPlaying;
   playingTrack;
   playingTracks;
+  openVolume = 1;
 
   // Run
   constructor() {
@@ -60,6 +61,8 @@ class Controller extends HTMLElement {
   }
 
   getLocal() {
+    // Nếu có giá trị lấy được là chuỗi "undefined" hoặc thật sự là undefined thì trả vè null
+    // Nếu có giá tri hợp lệ thì dùng JSON.parse chuyển chuỗi thành kiểu dữ liệu boolean
     this.isPlaying =
       JSON.parse(
         localStorage.getItem("isPlaying") === "undefined" ||
@@ -67,6 +70,8 @@ class Controller extends HTMLElement {
           ? null
           : localStorage.getItem("isPlaying")
       ) || false;
+    // Nếu có giá trị lấy được là chuỗi "undefined" hoặc thật sự là undefined thì trả vè null
+    // Nếu có giá tri hợp lệ thì dùng JSON.parse chuyển chuỗi thành kiểu dữ liệu null
     this.playingTrack =
       JSON.parse(
         localStorage.getItem("playingTrack") === "undefined" ||
@@ -74,6 +79,8 @@ class Controller extends HTMLElement {
           ? null
           : localStorage.getItem("playingTrack")
       ) || null;
+    // Nếu có giá trị lấy được là chuỗi "undefined" hoặc thật sự là undefined thì trả vè null
+    // Nếu có giá tri hợp lệ thì dùng JSON.parse chuyển chuỗi thành kiểu dữ liệu array
     this.playingTracks =
       JSON.parse(
         localStorage.getItem("playingTracks") === "undefined" ||
@@ -108,6 +115,11 @@ class Controller extends HTMLElement {
     this.durationTime = this.shadowRoot.querySelector("#duration-time");
     this.btnLoop = this.shadowRoot.querySelector("#btn-loop");
     this.btnRandom = this.shadowRoot.querySelector("#btn-random");
+    this.volumeBar = this.shadowRoot.querySelector("#volume-bar");
+    this.volumeFill = this.shadowRoot.querySelector("#volume-fill");
+    this.volumeHandle = this.shadowRoot.querySelector("#volume-handle");
+    this.btnNoice = this.shadowRoot.querySelector("#btn-noice i");
+
     if (!this.playingTrack) {
       this.playerLeft.style.visibility = "hidden";
     }
@@ -215,7 +227,9 @@ class Controller extends HTMLElement {
     };
 
     let isDragging = false;
+    let isDraggingVolume = false;
     let dragPercent = 0;
+    let dragPercentVolume = 0;
     // Click để tua
     this.progressBar.addEventListener("click", (e) => {
       const rect = this.progressBar.getBoundingClientRect();
@@ -224,15 +238,49 @@ class Controller extends HTMLElement {
       this.progressHandle.style.left = `calc(${percent * 100}% - 5px)` || 0;
       this.audio.currentTime = percent * this.audio.duration;
     });
+    this.volumeBar.addEventListener("click", (e) => {
+      const rect = this.volumeBar.getBoundingClientRect();
+      let percent = (e.clientX - rect.left) / rect.width;
+      percent = Math.max(0, Math.min(1, percent));
+      this.openVolume = percent;
+      if (percent === 0) {
+        this.openVolume = 0.5096770255796371;
+      }
+      this.volumeFill.style.width = `${percent * 100}%` || 0;
+      this.volumeHandle.style.left = `calc(${percent * 100}% - 5px)` || 0;
+      this.audio.volume = percent;
+      this._changeVolumeIcon();
+    });
+    this.btnNoice.addEventListener("click", (e) => {
+      if (e.target.closest(".fa-solid.fa-volume-high")) {
+        this.btnNoice.classList.remove("fa-volume-high");
+        this.btnNoice.classList.add("fa-volume-xmark");
+        this.volumeFill.style.width = 0;
+        this.volumeHandle.style.left = 0;
+        this.audio.volume = 0;
+      } else if (e.target.closest(".fa-volume-xmark")) {
+        this.btnNoice.classList.add("fa-volume-high");
+        this.btnNoice.classList.remove("fa-volume-xmark");
+        this.volumeFill.style.width = `${this.openVolume * 100}%` || 0;
+        this.volumeHandle.style.left =
+          `calc(${this.openVolume * 100}% - 5px)` || 0;
+        this.audio.volume = this.openVolume;
+      }
+    });
 
     // Kéo để tua (mousedown)
     this.progressHandle.addEventListener("mousedown", (e) => {
       e.stopPropagation(); // tránh click vào handle mà bị jump
       isDragging = true;
     });
+    this.volumeHandle.addEventListener("mousedown", (e) => {
+      e.stopImmediatePropagation();
+      isDraggingVolume = true;
+    });
 
     // Di chuyển khi kéo
     document.addEventListener("mousemove", (e) => {
+      // nếu là true thì return
       if (!isDragging) return;
       this.audio.pause();
 
@@ -248,20 +296,40 @@ class Controller extends HTMLElement {
       const previewTime = dragPercent * this.audio.duration;
       this.currentTime.textContent = formatTime(previewTime);
     });
+    document.addEventListener("mousemove", (e) => {
+      // nếu là true thì return
+      if (!isDraggingVolume) return;
+      const rect = this.volumeBar.getBoundingClientRect();
+      dragPercentVolume = (e.clientX - rect.left) / rect.width;
+      dragPercentVolume = Math.max(0, Math.min(1, dragPercentVolume));
+      this.openVolume = dragPercentVolume;
+      if (dragPercentVolume === 0) {
+        this.openVolume = 0.5096770255796371;
+      }
+      this.volumeFill.style.width = `${dragPercentVolume * 100}%` || 0;
+      this.volumeHandle.style.left =
+        `calc(${dragPercentVolume * 100}% - 5px)` || 0;
+      this.audio.volume = dragPercentVolume;
+      this._changeVolumeIcon();
+    });
 
     // Thả chuột => commit thời gian mới
     document.addEventListener("mouseup", () => {
       if (!isDragging) return;
       isDragging = false;
       this.audio.currentTime = dragPercent * this.audio.duration;
-      this.audio.play();
+      this.audio.pause();
+    });
+    document.addEventListener("mouseup", () => {
+      if (!isDraggingVolume) return;
+      isDraggingVolume = false;
     });
 
     document.addEventListener("playingTrack:re-render", (e) => {
       this.getLocal();
 
       this.renderControls();
-
+      // Nếu index là bài hát số ở index là 1 thì sẽ trừ đi 1 và next tiếp lên 1
       this.currentIndex =
         this.playingTracks.findIndex((i) => i.id === this.playingTrack.id) - 1;
       this._handleNextOrPrev(this.NEXT);
@@ -274,7 +342,15 @@ class Controller extends HTMLElement {
       this.audio.pause();
     });
   }
-
+  _changeVolumeIcon() {
+    if (this.audio.volume === 0.5096770255796371) {
+      this.btnNoice.className = "fa-solid fa-volume-down";
+    } else if (this.audio.volume === 0) {
+      this.btnNoice.className = "fa-solid fa-volume-xmark";
+    } else if (this.audio.volume > 0.5096770255796371) {
+      this.btnNoice.className = "fa-solid fa-volume-high";
+    }
+  }
   _restoreLoopState() {
     this.audio.loop = this.isLoop;
     this.btnLoop.classList.toggle("active", this.isLoop);
@@ -310,6 +386,7 @@ class Controller extends HTMLElement {
 
   _loadCurrentSong() {
     const currentSong = this._getCurrentSong();
+    console.log(currentSong);
     localStorage.setItem("isPlaying", "true");
     localStorage.setItem("playingTrack", JSON.stringify(currentSong));
 

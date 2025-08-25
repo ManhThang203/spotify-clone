@@ -65,8 +65,10 @@ class Playlist extends HTMLElement {
     // gọi 1 lần duy  nhất
     this.style.visibility = "visible";
   }
-
+  // Lấy dự liệu từ LocalStorage
   getLocal() {
+    // Nếu có giá trị lấy được là chuỗi "undefined" hoặc thật sự là undefined thì trả vè null
+    // Nếu có giá tri hợp lệ thì dùng JSON.parse chuyển chuỗi thành kiểu dữ liệu boolean
     this.isPlaying =
       JSON.parse(
         localStorage.getItem("isPlaying") === "undefined" ||
@@ -74,6 +76,8 @@ class Playlist extends HTMLElement {
           ? null
           : localStorage.getItem("isPlaying")
       ) || false;
+    // Nếu có giá trị lấy được là chuỗi "undefined" hoặc thật sự là undefined thì trả vè null
+    // Nếu có giá tri hợp lệ thì dùng JSON.parse chuyển chuỗi thành kiểu dữ liệu null
     this.playingTrack =
       JSON.parse(
         localStorage.getItem("playingTrack") === "undefined" ||
@@ -81,6 +85,8 @@ class Playlist extends HTMLElement {
           ? null
           : localStorage.getItem("playingTrack")
       ) || null;
+    // Nếu có giá trị lấy được là chuỗi "undefined" hoặc thật sự là undefined thì trả vè null
+    // Nếu có giá tri hợp lệ thì dùng JSON.parse chuyển chuỗi thành kiểu dữ liệu array
     this.playingTracks =
       JSON.parse(
         localStorage.getItem("playingTracks") === "undefined" ||
@@ -91,10 +97,11 @@ class Playlist extends HTMLElement {
   }
   // kiểm tra bài hát đang hát có phải là bài hát hiện tại hay không
   isSame() {
-    // kiểm tra bài hát đang hát có chùng với danh sách bài hát đó không
+    // kiểm tra bài hát đang hát có nằm trong danh sách bài hát đó không
     this.isSameTrack = this.artistTracks.some(
       (i) => i.id === this.playingTrack?.id
     );
+    //  kiểm tra danh sách bải hát A với danh sách bài hát B
     this.isSameTracks = this.arraysDeepEqualOrdered(
       this.artistTracks,
       this.playingTracks
@@ -104,23 +111,17 @@ class Playlist extends HTMLElement {
 
   async getData() {
     this.getLocal();
-    this.artistId = this.dataset.id;
-    this.artistSongId = this.dataset.id;
-    console.log(this.artistSongId);
+    this.artistId = this.dataset.artist;
     this.type = this.dataset.type;
     const { tracks } = await httpRequest.get("tracks?limit=50&offset=0");
     this.artistTracks = tracks.filter(
       (item) => item.artist_id === this.artistId
     );
     this.artist = await httpRequest.get(`artists/${this.artistId}`);
-    this.artistSong = await httpRequest.get(`tracks/${this.artistSongId}`);
-    console.log(this.artistSong);
-
     this.isSame(); // cập nhật lại luôn khi chyển tới nghệ sĩ khác
   }
 
   getElement() {
-    // this.contentWrapper = this.shadowRoot.querySelector("")
     this.artistHero = this.shadowRoot.querySelector("#artist-hero");
     this.artistControls = this.shadowRoot.querySelector("#artist-controls");
     this.trackList = this.shadowRoot.querySelector("#track-list");
@@ -128,7 +129,6 @@ class Playlist extends HTMLElement {
 
   async renderHero() {
     try {
-      // const endPoint = type === "tracks" ? `tracks/${id}` : `artists/${id}`;
       const { background_image_url, monthly_listeners, name } = this.artist;
       const html = `
      <div class="hero-background">
@@ -150,6 +150,8 @@ class Playlist extends HTMLElement {
 
   renderControls() {
     let isPlaying;
+    // this.isSameTrack : nếu là đúng là bài hát của danh sách nghệ sĩ đó
+    // this.isSameTracks : nếu danh sách bài hát của nghệ sĩ đó
     if (this.isSameTrack && this.isSameTracks) {
       isPlaying = this.isPlaying;
     } else {
@@ -178,12 +180,16 @@ class Playlist extends HTMLElement {
     this.btnAreFollow = this.shadowRoot.querySelector("#btn-arefollow");
 
     this.playBtnLarge.addEventListener("click", () => {
+      // khi phát
       if (isPlaying) {
         localStorage.setItem("isPlaying", "false");
         //dispatch event
         document.dispatchEvent(new CustomEvent("playingTrack:isPlaying:false"));
       } else {
+        // không phát
         this.playBtnLarge.classList.add("playing");
+        // this.isSameTrack : nếu là đúng là bài hát của danh sách nghệ sĩ đó
+        // this.isSameTracks : nếu danh sách bài hát của nghệ sĩ đó
         if (this.isSameTrack && this.isSameTracks) {
           localStorage.setItem("isPlaying", "true");
           //dispatch event
@@ -229,6 +235,8 @@ class Playlist extends HTMLElement {
         const duration = formatTime(item.duration);
 
         let isPlaying;
+        // kiểm tra các điều kiện trong hàm isSame
+        // kiểm tra thêm bài hát đang phát có phải là bài hát đang lưu vào local ko
         if (this.isSame() && item.id === this.playingTrack.id) {
           isPlaying = true;
         } else {
@@ -276,7 +284,7 @@ class Playlist extends HTMLElement {
         //   document.dispatchEvent(new CustomEvent("open:loginModal"));
         //   return;
         // }
-        if (this.isSame() && item.dataset.id === this.playingTrack.id) {
+        if (this.isSame()) {
           localStorage.setItem("isPlaying", !this.isPlaying);
           //re-render
           this.getLocal();
@@ -339,21 +347,6 @@ class Playlist extends HTMLElement {
   }
 
   setListner() {
-    document.addEventListener("curren-song", (e) => {
-      const { currentIndex, song } = e.detail;
-      this.currentIndex = currentIndex;
-      this.playingSong = song; // update lại bài hát mới mới
-      // gọi lại để  this.currentIndex
-      this.renderTracks();
-    });
-
-    document.addEventListener("toggle-play", (e) => {
-      const { isPlaying } = e.detail;
-      this.isPlaying = isPlaying;
-      // gọi lại để  this.currentIndex
-      this.renderTracks();
-    });
-
     document.addEventListener(
       "playingTrack:toPlaylistDetail:re-render",
       (e) => {
@@ -383,6 +376,7 @@ class Playlist extends HTMLElement {
   // Deep equal cơ bản cho dữ liệu thuần (Object/Array/Date/primitive)
   deepEqual(a, b) {
     if (Object.is(a, b)) return true; // đúng cho NaN, -0
+    // kiểm tra nếu là phần từ a và b có phải là obj hay null không
     if (
       typeof a !== "object" ||
       a === null ||
@@ -390,13 +384,16 @@ class Playlist extends HTMLElement {
       b === null
     )
       return false;
-
+    // mỗi obj trong js đềucó thuộc tính constructor
+    // kiểm tra phần từ a hay b có cùng constructor
     if (a.constructor !== b.constructor) return false;
     if (a instanceof Date)
       return b instanceof Date && a.getTime() === b.getTime();
-
+    // nếu phần từ a là mảng
     if (Array.isArray(a)) {
+      // nếu phần từ b không phải là mảng Hoặc độ dài a và b khác nhau
       if (!Array.isArray(b) || a.length !== b.length) return false;
+      // nếu phàn từ a là mảng thì lặp qua từ phần từ là đệ quy gọi lại hàm deepEqual để kieemrb  tra kiều mảng
       for (let i = 0; i < a.length; i++) {
         if (!this.deepEqual(a[i], b[i])) return false;
       }
@@ -406,9 +403,11 @@ class Playlist extends HTMLElement {
     const keysA = Object.keys(a);
     const keysB = Object.keys(b);
     if (keysA.length !== keysB.length) return false;
-
+    // lặp qua phân từ a qua các key
     for (const k of keysA) {
+      // nếu key của phần từ a không có trong phàn từ b
       if (!Object.prototype.hasOwnProperty.call(b, k)) return false;
+      // đệ  quy để gọi lại hàm deepEqual chuyền vào value để kiểm tra có gióng nhau không
       if (!this.deepEqual(a[k], b[k])) return false;
     }
     return true;
